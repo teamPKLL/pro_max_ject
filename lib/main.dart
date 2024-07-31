@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 
-
+// 킼킼 로그인 유아이 완성해따!
 void main() async{
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
