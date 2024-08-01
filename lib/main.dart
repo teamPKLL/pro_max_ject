@@ -80,8 +80,51 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
                 ),
-                // SizedBox(height: 1), // 버튼과 이미지 사이의 간격
-                Image.asset('assets/login_icon.png'), // 여기에 이미지 추가
+
+
+                SizedBox(height: 24), // 버튼과 이미지 사이의 간격
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          // 첫 번째 원형 버튼 클릭 동작
+                          print('First button tapped');
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Color(0xEF537052),
+                          backgroundImage: AssetImage('assets/Google logo.png'),
+                        ),
+                      ),
+                      // SizedBox(height: 100),
+                      GestureDetector(
+                        onTap: () {
+                          // 두 번째 원형 버튼 클릭 동작
+                          print('Second button tapped');
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Color(0xEF537052),
+                          backgroundImage: AssetImage('assets/Facbook.png'),
+                        ),
+                      ),
+                      // SizedBox(height: 16),
+                      GestureDetector(
+                        onTap: () {
+                          // 세 번째 원형 버튼 클릭 동작
+                          print('Third button tapped');
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Color(0xEF537052),
+                          backgroundImage: AssetImage('assets/kakao.png'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
