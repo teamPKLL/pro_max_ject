@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pro_max_ject/map.dart';
+import 'package:pro_max_ject/widgetmain.dart';
 
 void main() {
-  runApp(const MyApp());
+  // runApp(const MyApp()); 로그인 창
+  // runApp(CodiaPage());
+  runApp(const FigmaToCodeApp()); // 메인화면
 }
 
 class MyApp extends StatelessWidget {
@@ -12,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(  // 삼각형 추가로 하면 좋을듯
+        appBar: AppBar(
+          // 삼각형 추가로 하면 좋을듯
           // 맨 위 바
           backgroundColor: Color(0xEF537052),
           centerTitle: true,
@@ -66,7 +71,8 @@ class MyApp extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0xFF537052)),
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xFF537052)),
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
@@ -81,16 +87,14 @@ class MyApp extends StatelessWidget {
                   ),
                 ),
 
-
                 SizedBox(height: 24), // 버튼과 이미지 사이의 간격
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          // 첫 번째 원형 버튼 클릭 동작
-                          print('First button tapped');
+                      TextButton(
+                        onPressed: () { // 첫 번째 원형 버튼 클릭 동작
+                          print('구글 로그인 누름');
                         },
                         child: CircleAvatar(
                           radius: 25,
@@ -99,10 +103,9 @@ class MyApp extends StatelessWidget {
                         ),
                       ),
                       // SizedBox(height: 100),
-                      GestureDetector(
-                        onTap: () {
-                          // 두 번째 원형 버튼 클릭 동작
-                          print('Second button tapped');
+                      TextButton(
+                        onPressed: () { // 두 번째 원형 버튼 클릭 동작
+                          print('페북로그인버튼 누름');
                         },
                         child: CircleAvatar(
                           radius: 25,
@@ -111,10 +114,9 @@ class MyApp extends StatelessWidget {
                         ),
                       ),
                       // SizedBox(height: 16),
-                      GestureDetector(
-                        onTap: () {
-                          // 세 번째 원형 버튼 클릭 동작
-                          print('Third button tapped');
+                      TextButton(
+                        onPressed: () { // 세 번째 원형 버튼 클릭 동작
+                          print('카톡로그인버튼 누름');
                         },
                         child: CircleAvatar(
                           radius: 25,
@@ -123,6 +125,20 @@ class MyApp extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+
+                SizedBox(height: 24),
+                TextButton(  // 비밀번호 찾기 버튼
+                  onPressed: () {},
+                  child: Text(
+                    'Forgot Password',
+                    style: TextStyle(
+                      fontSize: 16,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xEF537052),
+                    ),
                   ),
                 ),
               ],

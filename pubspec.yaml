@@ -64,6 +64,13 @@ flutter:
     - assets/Facbook.png
     - assets/kakao.png
     - assets/Google logo.png
+    - assets/sos_button.png
+  fonts:
+    - family: BM_HANNA_TTF
+      fonts:
+        - asset: assets/font/BMHANNA_11yrs_ttf.ttf
+  #    - images/image1_I208861285.png
+  #    - images/image2_I208861291.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
@@ -79,7 +86,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  #    - family: Lexend Deca
+  #      fonts:
+  #        - asset: fonts/Lexend_Deca.ttf
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
