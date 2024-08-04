@@ -4,7 +4,7 @@ import 'package:pro_max_ject/main.dart';
 
 class FigmaToCodeApp extends StatelessWidget {
   const FigmaToCodeApp({super.key});
-
+/////////////////// 메인 화면 ////////////////////
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -354,6 +354,8 @@ class _MainState extends State<Main> {
           ),
         ],
       ),
+
+      //////////// 하단 네비게이션 바 부분 ///////////////////////
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white, // 하단 네비게이션 바의 배경색
         selectedItemColor: Color(0xEF537052), // 선택된 아이템의 색상

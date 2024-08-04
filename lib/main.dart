@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pro_max_ject/map.dart';
+import 'package:pro_max_ject/signup.dart';
 import 'package:pro_max_ject/widgetmain.dart';
 
 void main() {
-  // runApp(const MyApp()); 로그인 창
-  // runApp(CodiaPage());
-  runApp(const FigmaToCodeApp()); // 메인화면
+  // runApp(const MyApp()); //로그인 창
+  runApp(const SignUp()); // 가입 창
+  // runApp(MapPage());  // 맵 페이지
+  // runApp(const FigmaToCodeApp()); // 메인화면
 }
 
 class MyApp extends StatelessWidget {
@@ -98,7 +100,7 @@ class MyApp extends StatelessWidget {
                         },
                         child: CircleAvatar(
                           radius: 25,
-                          backgroundColor: Color(0xEF537052),
+                          backgroundColor: Colors.white,
                           backgroundImage: AssetImage('assets/Google logo.png'),
                         ),
                       ),
@@ -109,7 +111,7 @@ class MyApp extends StatelessWidget {
                         },
                         child: CircleAvatar(
                           radius: 25,
-                          backgroundColor: Color(0xEF537052),
+                          backgroundColor: Colors.white,
                           backgroundImage: AssetImage('assets/Facbook.png'),
                         ),
                       ),
@@ -120,7 +122,7 @@ class MyApp extends StatelessWidget {
                         },
                         child: CircleAvatar(
                           radius: 25,
-                          backgroundColor: Color(0xEF537052),
+                          backgroundColor: Colors.white,
                           backgroundImage: AssetImage('assets/kakao.png'),
                         ),
                       ),
@@ -132,7 +134,21 @@ class MyApp extends StatelessWidget {
                 TextButton(  // 비밀번호 찾기 버튼
                   onPressed: () {},
                   child: Text(
-                    'Forgot Password',
+                    'Forgot Password?',
+                    style: TextStyle(
+                      fontSize: 16,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xEF537052),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 8),
+                TextButton(  // 비밀번호 찾기 버튼
+                  onPressed: () {},
+                  child: Text(
+                    'Sign Up',
                     style: TextStyle(
                       fontSize: 16,
                       decoration: TextDecoration.underline,
