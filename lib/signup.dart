@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'forgot.dart';
 
 void main() {
   runApp(const SignUp()); // 회원가입 창

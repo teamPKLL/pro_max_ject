@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pro_max_ject/map.dart';
+import 'package:pro_max_ject/reminder.dart';
 import 'package:pro_max_ject/signup.dart';
 import 'package:pro_max_ject/widgetmain.dart';
+import 'package:pro_max_ject/forgot.dart';
+import 'package:pro_max_ject/reminder.dart';
+import 'package:pro_max_ject/faq.dart';
 
 void main() {
   // runApp(const MyApp()); //로그인 창
-  runApp(const SignUp()); // 가입 창
+  // runApp(const SignUp()); // 가입 창
   // runApp(MapPage());  // 맵 페이지
   // runApp(const FigmaToCodeApp()); // 메인화면
+  // runApp(const ForGot());  // 아이디 비번 찾는창
+  // runApp(const ReminderList());  // 알림 페이지
+  runApp(const FAQList()); // FAQ
 }
 
 class MyApp extends StatelessWidget {
@@ -132,7 +139,12 @@ class MyApp extends StatelessWidget {
 
                 SizedBox(height: 24),
                 TextButton(  // 비밀번호 찾기 버튼
-                  onPressed: () {},
+                  onPressed: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => ForGot()),
+                    // );
+                  },
                   child: Text(
                     'Forgot Password?',
                     style: TextStyle(
@@ -145,9 +157,14 @@ class MyApp extends StatelessWidget {
                 ),
 
                 SizedBox(height: 8),
-                TextButton(  // 비밀번호 찾기 버튼
-                  onPressed: () {},
-                  child: Text(
+                TextButton(  // 가입 버튼
+                  onPressed: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const SignUp()),
+                    // );
+                  },
+                  child: const Text(
                     'Sign Up',
                     style: TextStyle(
                       fontSize: 16,
