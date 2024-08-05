@@ -75,46 +75,17 @@ class BodyWidget extends StatelessWidget {
           ContentBox(
             children: [
               ContentIconRow(icon: Icon(Icons.account_circle), text: "Edit Profile Information"),
-              InkWell(  // Row 2
-                onTap: (){},
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                        padding: EdgeInsets.all(5),
-                        child: Icon(Icons.notifications_none)
-                    ),
-                    Expanded(child: Text("Notifications")),
-                    Container(
-                        padding: EdgeInsets.all(5),
-                        child: Text('ON', style: const TextStyle(color: Colors.blue),)
-                    )
-                  ]
-                ),
-              ),
-              InkWell(  // Row 3
-                onTap: (){},
-                child: Row(
-                  children: [
-                    Container(
-                        padding: EdgeInsets.all(5),
-                        child: Icon(Icons.language)
-                    ),
-                    Expanded(child: Text("Language")),
-                    Container(
-                        padding: EdgeInsets.all(5),
-                        child: Text('English', style: const TextStyle(color: Colors.blue),)
-                    )
-                  ]
-                ),
-              ),
+              ContentIconRow(icon: Icon(Icons.notifications_none), text: "Notifications", description: "ON"),
+              ContentIconRow(icon: Icon(Icons.language), text: "Language", description: "English")
             ],
           ),
-          ContentBox(children: [
-            ContentIconRow(icon: Icon(Icons.help), text: "Help & Support"),
-            ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
-            ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
-          ])
+          ContentBox(
+            children: [
+              ContentIconRow(icon: Icon(Icons.help), text: "Help & Support"),
+              ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
+              ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
+            ]
+          )
         ],
       ),
     );
@@ -157,8 +128,9 @@ class ContentIconRow extends StatelessWidget {
 
   final String text;
   final Icon icon;
+  final String? description;
 
-  const ContentIconRow({super.key, required this.icon, required this.text});
+  const ContentIconRow({super.key, required this.icon, required this.text, this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -171,6 +143,12 @@ class ContentIconRow extends StatelessWidget {
                 child: icon
             ),
             Expanded(child: Text(text)),
+            if(description != null) ...[
+              Container(
+                  padding: EdgeInsets.all(5),
+                  child: Text(description!, style: const TextStyle(color: Colors.blue),)
+              )
+            ]
           ]
       ),
     );
