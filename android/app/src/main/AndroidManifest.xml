@@ -1,8 +1,20 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.android.application">
     <application
         android:label="pro_max_ject"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <activity android:name="com.kakao.sdk.flutter.AppsHandlerActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <!--  배송지 피커를 위한 설정  -->
+                <data android:scheme="kakaoc16c44bd57bcaf0c1b866cb6bd1ce937"/>
+                <data android:host="address"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

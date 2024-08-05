@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:pro_max_ject/map.dart';
 import 'package:pro_max_ject/reminder.dart';
 import 'package:pro_max_ject/signup.dart';
@@ -7,7 +9,26 @@ import 'package:pro_max_ject/forgot.dart';
 import 'package:pro_max_ject/reminder.dart';
 import 'package:pro_max_ject/faq.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  // Flutter 엔진을 초기화
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // kakao login
+
+  // runApp() 호출 전 Flutter SDK 초기화
+  KakaoSdk.init(
+    nativeAppKey: 'c16c44bd57bcaf0c1b866cb6bd1ce937',
+    javaScriptAppKey: '8bc1ee40ec3a8a422d71fb1956f0ebf7',
+  );
+
+  // firebase login
+  await Firebase.initializeApp(  // Firebase를 초기화
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+
   // runApp(const MyApp()); //로그인 창
   // runApp(const SignUp()); // 가입 창
   // runApp(MapPage());  // 맵 페이지

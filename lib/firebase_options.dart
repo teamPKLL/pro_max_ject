@@ -5,10 +5,6 @@ import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'firebase_options.dart';
 
-
-
-
-
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -51,6 +47,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1019804409974',
     projectId: 'promax-fe1c2',
     authDomain: 'promax-fe1c2.firebaseapp.com',
+    databaseURL: 'https://promax-fe1c2-default-rtdb.firebaseio.com',
     storageBucket: 'promax-fe1c2.appspot.com',
     measurementId: 'G-2ZBZ2L26M8',
   );
@@ -60,6 +57,7 @@ class DefaultFirebaseOptions {
     appId: '1:1019804409974:android:b0695806f68068a71e7f57',
     messagingSenderId: '1019804409974',
     projectId: 'promax-fe1c2',
+    databaseURL: 'https://promax-fe1c2-default-rtdb.firebaseio.com',
     storageBucket: 'promax-fe1c2.appspot.com',
   );
 
@@ -68,7 +66,10 @@ class DefaultFirebaseOptions {
     appId: '1:1019804409974:ios:3b5925231512ef101e7f57',
     messagingSenderId: '1019804409974',
     projectId: 'promax-fe1c2',
+    databaseURL: 'https://promax-fe1c2-default-rtdb.firebaseio.com',
     storageBucket: 'promax-fe1c2.appspot.com',
+    androidClientId: '1019804409974-nom96u45sbkl1f64mhba8euso8h18928.apps.googleusercontent.com',
+    iosClientId: '1019804409974-mvpa3l5b4lsolhiri2v8b4mlcvmf0771.apps.googleusercontent.com',
     iosBundleId: 'com.project.proMaxJect',
   );
 
@@ -77,7 +78,10 @@ class DefaultFirebaseOptions {
     appId: '1:1019804409974:ios:3b5925231512ef101e7f57',
     messagingSenderId: '1019804409974',
     projectId: 'promax-fe1c2',
+    databaseURL: 'https://promax-fe1c2-default-rtdb.firebaseio.com',
     storageBucket: 'promax-fe1c2.appspot.com',
+    androidClientId: '1019804409974-nom96u45sbkl1f64mhba8euso8h18928.apps.googleusercontent.com',
+    iosClientId: '1019804409974-mvpa3l5b4lsolhiri2v8b4mlcvmf0771.apps.googleusercontent.com',
     iosBundleId: 'com.project.proMaxJect',
   );
 
@@ -87,7 +91,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1019804409974',
     projectId: 'promax-fe1c2',
     authDomain: 'promax-fe1c2.firebaseapp.com',
+    databaseURL: 'https://promax-fe1c2-default-rtdb.firebaseio.com',
     storageBucket: 'promax-fe1c2.appspot.com',
     measurementId: 'G-BX179C37KY',
   );
+
 }
