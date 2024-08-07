@@ -41,4 +41,15 @@ class UserService {
     bool isDuplicate = await isIdDuplicate(id); // ID 중복 확인
     return isDuplicate ? '이미 존재하는 아이디입니다.' : '사용 가능한 아이디입니다.'; // 결과에 따른 메시지 반환
   }
+
+  // 로그인 시 유저 인증 메서드
+  Future<String?> loginUser(String id, String password) async {
+    String hashedPassword = HashUtil.hashPassword(password);
+    User? user = await _userRepository.authenticateUser(id, hashedPassword);
+    if (user != null) {
+      return null; // 로그인 성공
+    } else {
+      return '아이디 또는 비밀번호가 잘못되었습니다.'; // 로그인 실패
+    }
+  }
 }

@@ -14,4 +14,18 @@ class UserRepository {
   Future<DataSnapshot> getUserById(String id) async {
     return await _databaseRef.child(id).get(); // 사용자 ID를 키로 하여 데이터베이스에서 사용자 정보 가져오기
   }
+
+  // 유저의 ID와 해시된 비밀번호를 검증하는 메서드
+  Future<User?> authenticateUser(String id, String hashedPassword) async {
+    DataSnapshot snapshot = await getUserById(id);
+    if (snapshot.exists) {
+      // 데이터를 Map<String, dynamic>으로 변환
+      Map<String, dynamic> userData = Map<String, dynamic>.from(snapshot.value as Map);
+      User user = User.fromJson(userData);
+      if (user.hashedPassword == hashedPassword) {
+        return user;
+      }
+    }
+    return null;
+  }
 }
