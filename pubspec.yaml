@@ -51,7 +51,6 @@ dependencies:
   kakao_flutter_sdk_navi: ^1.9.5 # 카카오내비 API 패키지
   flutter_naver_login: ^1.8.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -76,6 +75,7 @@ flutter:
     - assets/kakao.png
     - assets/Google logo.png
     - assets/sos_button.png
+    - assets/naver.png
   fonts:
     - family: BM_HANNA_TTF
       fonts:
