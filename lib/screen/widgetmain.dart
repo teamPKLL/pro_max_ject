@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:pro_max_ject/main.dart';
+import 'package:pro_max_ject/screen/map.dart';
+import 'package:pro_max_ject/screen/myPage.dart';
+import 'package:pro_max_ject/screen/reminder.dart';
 
 class FigmaToCodeApp extends StatelessWidget {
   const FigmaToCodeApp({super.key});
@@ -26,6 +29,13 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   int _selectedIndex = 0; // 현재 선택된 인덱스
+
+  final List<Widget> screens = [
+    FigmaToCodeApp(),
+    Reminder(),
+    MapPage(),
+    MyPage(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -132,10 +142,7 @@ class _MainState extends State<Main> {
                   top: 300,
                   child: InkWell(
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => MyApp()),
-                      // );  // MyApp에다가 다음 페이지 설정
+
                     }, // 버튼
                     child: Container(
                       width: 160,
@@ -355,32 +362,37 @@ class _MainState extends State<Main> {
         ],
       ),
 
-      /////////////////// 하단 네비게이션 바 부분 ///////////////////////
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white, // 하단 네비게이션 바의 배경색
-        selectedItemColor: Color(0xEF537052), // 선택된 아이템의 색상
-        unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '검색',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '메뉴',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '마이페이지',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      // /////////////////// 하단 네비게이션 바 부분 ///////////////////////
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.white, // 하단 네비게이션 바의 배경색
+      //   selectedItemColor: Color(0xEF537052), // 선택된 아이템의 색상
+      //   unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: '홈',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.search),
+      //       label: '검색',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.menu),
+      //       label: '메뉴',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: '마이페이지',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   // onTap: _onItemTapped,
+      //   onTap: (index) {
+      //     setState(() {
+      //       _selectedIndex = index;
+      //     });
+      //   },
+      // ),
     );
   }
 }
