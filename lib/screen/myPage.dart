@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import '../firebase_options.dart';
 
 void main() async{
   runApp(const MyPage());
@@ -14,18 +14,19 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(backgroundColor: Colors.lightGreen,),
-        body: const MyPageBodyWidget(),
-        bottomNavigationBar: BottomAppBar(),
+        backgroundColor: Color(0xFFF0F1F0), // 전체 배경 컬러
+          resizeToAvoidBottomInset : false,
+          body: SingleChildScrollView(child: BodyWidget()),
       ),
     );
   }
 }
 
-class MyPageBodyWidget extends StatelessWidget {
-  const MyPageBodyWidget({super.key});
+class BodyWidget extends StatelessWidget {
+  const BodyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class MyPageBodyWidget extends StatelessWidget {
           Container(  // user description box
             padding: EdgeInsets.fromLTRB(0, 30, 0, 5),
             width: double.infinity,
-            color: Color(0xFFF0F1F0),
+            color: Color(0xF0F1F0),
             child: Column(
               children: [
                 Container(
@@ -80,11 +81,15 @@ class MyPageBodyWidget extends StatelessWidget {
             ],
           ),
           ContentBox(
-            children: [
-              ContentIconRow(icon: Icon(Icons.help), text: "Help & Support"),
-              ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
-              ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
-            ]
+              children: [
+                ContentIconRow(icon: Icon(Icons.help), text: "Help & Support"),
+                ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
+                ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
+              ],
+          ),
+          ContentBox(children: [
+            ContentIconRow(icon: Icon(Icons.logout_outlined), text: "Log Out"),
+          ]
           )
         ],
       ),
@@ -154,5 +159,3 @@ class ContentIconRow extends StatelessWidget {
     );
   }
 }
-
-
