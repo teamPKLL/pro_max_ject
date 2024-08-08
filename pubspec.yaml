@@ -52,6 +52,7 @@ dependencies:
   kakao_flutter_sdk_navi: ^1.9.5 # 카카오내비 API 패키지
   flutter_naver_login: ^1.8.0
   crypto: ^3.0.0 #비밀번호 해시화 패키지
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

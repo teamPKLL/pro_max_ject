@@ -130,9 +130,9 @@ class _SosPageState extends State<SosPage> {
                   child: Text(
                     '* 의료정보',
                     style: TextStyle(
-                      color: Color(0xFFD32E24),
-                      fontSize: 15,
-                      fontFamily: "BM_HANNA_TTF"
+                        color: Color(0xFFD32E24),
+                        fontSize: 15,
+                        fontFamily: "BM_HANNA_TTF"
                     ),
                   ),
                 ),
@@ -267,3 +267,5 @@ class Group78 extends StatelessWidget {
     );
   }
 }
+
+

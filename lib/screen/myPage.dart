@@ -14,12 +14,12 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        // appBar: AppBar(backgroundColor: Color(0xEF537052)),
-        body: const BodyWidget(),
-        // bottomNavigationBar: BottomAppBar(),
+        backgroundColor: Color(0xFFF0F1F0), // 전체 배경 컬러
+          resizeToAvoidBottomInset : false,
+          body: SingleChildScrollView(child: BodyWidget()),
       ),
     );
   }
@@ -81,11 +81,11 @@ class BodyWidget extends StatelessWidget {
             ],
           ),
           ContentBox(
-            children: [
-              ContentIconRow(icon: Icon(Icons.help), text: "Help & Support"),
-              ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
-              ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
-            ]
+              children: [
+                ContentIconRow(icon: Icon(Icons.help), text: "Help & Support"),
+                ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
+                ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
+              ],
           ),
           ContentBox(children: [
             ContentIconRow(icon: Icon(Icons.logout_outlined), text: "Log Out"),
@@ -159,5 +159,3 @@ class ContentIconRow extends StatelessWidget {
     );
   }
 }
-
-
