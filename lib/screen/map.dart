@@ -29,33 +29,10 @@ class TestView extends StatefulWidget {
 }
 
 class _TestViewState extends State<TestView> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Handle the navigation logic here
-    switch (index) {
-      case 0:
-      // Handle home tap
-        break;
-      case 1:
-      // Handle search tap
-        break;
-      case 2:
-      // Handle menu tap
-        break;
-      case 3:
-      // Handle profile tap
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Color(0xFFF0F1F0), // 전체 배경 컬러
       appBar: AppBar(
         title: const Text(
@@ -76,7 +53,8 @@ class _TestViewState extends State<TestView> {
           ),
         ],
       ),
-      body: Column(
+      resizeToAvoidBottomInset : false,
+      body: SingleChildScrollView(child: Column(
         children: [
           Container(
             width: double.infinity,
@@ -162,6 +140,6 @@ class _TestViewState extends State<TestView> {
       //   currentIndex: _selectedIndex,
       //   onTap: _onItemTapped,
       // ),
-    );
+      ));
   }
 }
