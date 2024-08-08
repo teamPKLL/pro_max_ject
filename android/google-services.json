@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1019804409974",
+    "firebase_url": "https://promax-fe1c2-default-rtdb.firebaseio.com",
+    "project_id": "promax-fe1c2",
+    "storage_bucket": "promax-fe1c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019804409974:android:b0695806f68068a71e7f57",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019804409974-nom96u45sbkl1f64mhba8euso8h18928.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.application",
+            "certificate_hash": "c2c89b9805641d7b3a1578d24b79d0e4318fd302"
+          }
+        },
+        {
+          "client_id": "1019804409974-kjfohd1751i9bk4qo8lcuio1b155kbop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-RLUPiGjXQwnQEehQEVTcOiC4GVBA5Uk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019804409974-kjfohd1751i9bk4qo8lcuio1b155kbop.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1019804409974-3bna1snhvsl1v1ht8b2hvf8cp780s02e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kakaolog"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

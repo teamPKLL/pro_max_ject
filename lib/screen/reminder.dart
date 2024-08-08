@@ -46,8 +46,8 @@ class Reminder extends StatelessWidget {
                     children: [
                       /////////////   알림 텍스트   ///////////
                       Positioned(
-                        left: screenWidth * 0.25, // 화면 너비의 25%
-                        top: screenHeight * 0.01, // 화면 높이의 1%
+                        left: screenWidth * 0.15, // 화면 너비의 25%
+                        top: screenHeight * 0.0001, // 화면 높이의 1%
                         child: SizedBox(
                           width: screenWidth * 0.6, // 화면 너비의 60%
                           child: Text(
@@ -69,37 +69,37 @@ class Reminder extends StatelessWidget {
 
               /////////////////   알림 박스   //////////////////
               buildReminderBox(
-                top: screenHeight * 0.1, // 화면 높이의 12%
+                top: screenHeight * 0.12, // 화면 높이의 12%
                 screenWidth: screenWidth,
                 screenHeight: screenHeight,
                 text: '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
               ),
               buildReminderBox(
-                top: screenHeight * 0.22, // 화면 높이의 22%
+                top: screenHeight * 0.23, // 화면 높이의 22%
                 screenWidth: screenWidth,
                 screenHeight: screenHeight,
                 text: '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
               ),
               buildReminderBox(
-                top: screenHeight * 0.32, // 화면 높이의 32%
+                top: screenHeight * 0.34, // 화면 높이의 32%
                 screenWidth: screenWidth,
                 screenHeight: screenHeight,
                 text: '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
               ),
               buildReminderBox(
-                top: screenHeight * 0.42, // 화면 높이의 42%
+                top: screenHeight * 0.45, // 화면 높이의 42%
                 screenWidth: screenWidth,
                 screenHeight: screenHeight,
                 text: '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
               ),
               buildReminderBox(
-                top: screenHeight * 0.52, // 화면 높이의 52%
+                top: screenHeight * 0.56, // 화면 높이의 52%
                 screenWidth: screenWidth,
                 screenHeight: screenHeight,
                 text: '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
               ),
               buildReminderBox(
-                top: screenHeight * 0.62, // 화면 높이의 62%
+                top: screenHeight * 0.67, // 화면 높이의 62%
                 screenWidth: screenWidth,
                 screenHeight: screenHeight,
                 text: '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
