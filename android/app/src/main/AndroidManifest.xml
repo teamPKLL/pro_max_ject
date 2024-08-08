@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.android.application">
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="pro_max_ject"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
+
 
         <!--네이버 로그인 api 구현에 필요한 코드 -->
         <meta-data
