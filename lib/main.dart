@@ -7,6 +7,7 @@ import 'package:pro_max_ject/screen/myPage.dart';
 import 'package:pro_max_ject/screen/reminder.dart';
 import 'package:pro_max_ject/screen/signup.dart';
 import 'package:pro_max_ject/screen/widgetmain.dart';
+import 'package:pro_max_ject/screen/phone_verification.dart';
 
 import 'firebase_options.dart';
 
@@ -25,7 +26,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(const PhoneVerification());
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
@@ -81,19 +84,19 @@ class _MainScreenState extends State<MainScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: '홈',
+            label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '검색',
+            icon: Icon(Icons.map_outlined),
+            label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '메뉴',
+            icon: Icon(Icons.message_outlined),
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: '마이페이지',
+            label: '',
           ),
         ],
         currentIndex: _selectedIndex,
