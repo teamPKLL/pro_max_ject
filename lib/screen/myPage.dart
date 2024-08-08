@@ -15,10 +15,11 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(backgroundColor: Colors.lightGreen,),
+        // appBar: AppBar(backgroundColor: Color(0xEF537052)),
         body: const BodyWidget(),
-        bottomNavigationBar: BottomAppBar(),
+        // bottomNavigationBar: BottomAppBar(),
       ),
     );
   }
@@ -85,6 +86,10 @@ class BodyWidget extends StatelessWidget {
               ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
               ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
             ]
+          ),
+          ContentBox(children: [
+            ContentIconRow(icon: Icon(Icons.logout_outlined), text: "Log Out"),
+          ]
           )
         ],
       ),
