@@ -29,28 +29,6 @@ class TestView extends StatefulWidget {
 }
 
 class _TestViewState extends State<TestView> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Handle the navigation logic here
-    switch (index) {
-      case 0:
-      // Handle home tap
-        break;
-      case 1:
-      // Handle search tap
-        break;
-      case 2:
-      // Handle menu tap
-        break;
-      case 3:
-      // Handle profile tap
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +53,8 @@ class _TestViewState extends State<TestView> {
           ),
         ],
       ),
-      body: Column(
+      resizeToAvoidBottomInset : false,
+      body: SingleChildScrollView(child: Column(
         children: [
           Container(
             width: double.infinity,
@@ -135,31 +114,32 @@ class _TestViewState extends State<TestView> {
           SizedBox(height: 8),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white, // 하단 네비게이션 바의 배경색
-        selectedItemColor: Color(0xEF537052), // 선택된 아이템의 색상
-        unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '검색',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '메뉴',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '마이페이지',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-    );
+
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.white, // 하단 네비게이션 바의 배경색
+      //   selectedItemColor: Color(0xEF537052), // 선택된 아이템의 색상
+      //   unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: '홈',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.search),
+      //       label: '검색',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.menu),
+      //       label: '메뉴',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: '마이페이지',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      // ),
+      ));
   }
 }
