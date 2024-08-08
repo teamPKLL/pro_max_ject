@@ -17,15 +17,15 @@ class MyPage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(backgroundColor: Colors.lightGreen,),
-        body: const MyPageBodyWidget(),
+        body: const BodyWidget(),
         bottomNavigationBar: BottomAppBar(),
       ),
     );
   }
 }
 
-class MyPageBodyWidget extends StatelessWidget {
-  const MyPageBodyWidget({super.key});
+class BodyWidget extends StatelessWidget {
+  const BodyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class MyPageBodyWidget extends StatelessWidget {
           Container(  // user description box
             padding: EdgeInsets.fromLTRB(0, 30, 0, 5),
             width: double.infinity,
-            color: Color(0xFFF0F1F0),
+            color: Color(0xF0F1F0),
             child: Column(
               children: [
                 Container(
