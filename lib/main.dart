@@ -2,15 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:pro_max_ject/screen/login_screen.dart';
-import 'package:pro_max_ject/screen/map.dart';
-import 'package:pro_max_ject/screen/myPage.dart';
-import 'package:pro_max_ject/screen/reminder.dart';
 import 'package:pro_max_ject/screen/signup.dart';
 import 'package:pro_max_ject/screen/widget/Bottom_navi_widget.dart';
 import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
-import 'package:pro_max_ject/screen/widgetmain.dart';
 import 'package:provider/provider.dart';
-
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -29,12 +24,13 @@ Future<void> main() async {
   );
 
   runApp(
-      ChangeNotifierProvider(
-        create: (context) => IndexProvider(),
-        child: MyApp(),
-      ),
-  );
+  ChangeNotifierProvider(
+  create: (context) => IndexProvider(),
+  child: MyApp(),
+  ));
 }
+  // runApp(MyApp());
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,5 +48,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

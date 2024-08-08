@@ -85,7 +85,7 @@ class BodyWidget extends StatelessWidget {
                 ContentIconRow(icon: Icon(Icons.help), text: "Help & Support"),
                 ContentIconRow(icon: Icon(Icons.textsms_outlined), text: "Contact us"),
                 ContentIconRow(icon: Icon(Icons.security), text: "Privacy & Policy"),
-              ]
+              ],
           ),
           ContentBox(children: [
             ContentIconRow(icon: Icon(Icons.logout_outlined), text: "Log Out"),
