@@ -56,6 +56,12 @@ dependencies:
   kakao_map_plugin: ^0.3.1
   flutter_dotenv: ^5.1.0
   shared_preferences: ^2.0.8 #세션처리 패키지
+  webview_flutter_wkwebview: ^3.14.0
+  webview_flutter: ^4.8.0
+  webview_flutter_android: ^3.16.6
+  google_maps_flutter: ^2.9.0
+  google_maps_flutter_web: ^0.5.10
+  location: ^7.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,14 @@
+buildscript {
+    ext.kotlin_version = '1.9.0' // Kotlin 버전을 원하는 버전으로 변경하세요.
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 plugins {
     id "com.android.application"
     // START: FlutterFire Configuration
@@ -7,6 +18,8 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
+
+
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
