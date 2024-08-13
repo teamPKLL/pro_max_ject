@@ -6,6 +6,7 @@ import '../api/google_sign_in_provider.dart';
 import '../api/naver_sign_in_provider.dart';
 import '../api/kakao_login.dart';
 import '../api/main_view_model.dart';
+import '../services/user_service.dart'; // UserService를 import합니다.
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,8 +16,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 final viewModel = MainViewModel(KakaoLogin()); // 카카오톡 로그인 구현
+final UserService _userService = UserService(); // UserService 인스턴스 생성
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _login() async {
+    String id = _idController.text;
+    String password = _passwordController.text;
+
+    String? loginResult = await _userService.loginUser(id, password);
+    if (loginResult == null) {
+      Navigator.pushReplacementNamed(context, '/main');
+    } else {
+      // 로그인 실패 메시지를 사용자에게 표시합니다.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loginResult)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(height: 150), // AppBar와의 간격
-              const TextField(
+              TextField(
+                controller: _idController,
                 decoration: InputDecoration(
                   labelText: 'ID',
                   // 아이디 칸
@@ -53,7 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 16), // 조금 간격
-              const TextField(
+              TextField(
+                controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   // 비밀번호
@@ -73,9 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/main');
-                },
+                onPressed: _login, // 로그인 버튼을 누르면 _login 메서드를 호출합니다.
                 style: ButtonStyle(
                   backgroundColor:
                   MaterialStateProperty.all(Color(0xFF537052)),
@@ -187,4 +207,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+
 }

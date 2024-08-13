@@ -1,8 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.android.application">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:label="pro_max_ject"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- TODO: Add your Google Maps API key here -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA-RLUPiGjXQwnQEehQEVTcOiC4GVBA5Uk"/>
+
 
         <!--네이버 로그인 api 구현에 필요한 코드 -->
         <meta-data
@@ -16,6 +25,20 @@
             android:value="@string/client_name" />
         <!--네이버 로그인 api 구현에 필요한 코드 -->
 
+        <!-- 카카오 로그인 커스텀 URL 스킴 설정 -->
+        <activity
+            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+            android:exported="true">
+            <intent-filter android:label="flutter_web_auth">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식의 앱 실행 스킴 설정 -->
+                <!-- 카카오 로그인 Redirect URI -->
+                <data android:scheme="kakaoc16c44bd57bcaf0c1b866cb6bd1ce937" android:host="oauth"/>
+            </intent-filter>
+        </activity>
 
         <activity android:name="com.kakao.sdk.flutter.AppsHandlerActivity" android:exported="true">
             <intent-filter>

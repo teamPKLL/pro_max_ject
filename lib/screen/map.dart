@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 void main() {
   runApp(const MapPage());
@@ -29,34 +31,74 @@ class TestView extends StatefulWidget {
 }
 
 class _TestViewState extends State<TestView> {
-  int _selectedIndex = 0;
+  // 현재 위치 찍기
+  double lat = 0;
+  double lng = 0;
+  Location location = Location();
+  bool _serviceEnabled = true;
+  PermissionStatus? _permissionGranted;
+  late GoogleMapController mapController;
+  late LatLng _center;
+  late Set<Marker> _markers;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Handle the navigation logic here
-    switch (index) {
-      case 0:
-      // Handle home tap
-        break;
-      case 1:
-      // Handle search tap
-        break;
-      case 2:
-      // Handle menu tap
-        break;
-      case 3:
-      // Handle profile tap
-        break;
-    }
+  @override
+  void initState() {
+    super.initState();
+    _center = const LatLng(37.445884, 126.651960); // Default location
+    _markers = {};
+    _locateMe(); // Get the current location when the widget is initialized
   }
+
+  Future<void> _locateMe() async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    final LocationData locationData = await location.getLocation();
+    setState(() {
+      lat = locationData.latitude ?? 0.0;
+      lng = locationData.longitude ?? 0.0;
+      _center = LatLng(lat, lng);
+      _markers = {
+        Marker(
+          markerId: const MarkerId('current_location'),
+          position: _center,
+        ),
+      };
+
+
+      if (mapController != null) {
+        mapController.animateCamera(
+          CameraUpdate.newLatLng(_center),
+        );
+      }
+      // 현재위치 끝
+    });
+  }
+
+  // 구글 맵 끌어오기
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    _locateMe(); // 현재 주소 받아오기
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      backgroundColor: Color(0xFFF0F1F0), // 전체 배경 컬러
+      backgroundColor: const Color(0xFFF0F1F0), // 전체 배경 컬러
       appBar: AppBar(
         title: const Text(
           '이재난녕',
@@ -65,7 +107,7 @@ class _TestViewState extends State<TestView> {
             fontFamily: 'BM_HANNA_TTF',
           ),
         ),
-        backgroundColor: Color(0xEF537052),
+        backgroundColor: const Color(0xEF537052),
         elevation: 4,
         actions: [
           IconButton(
@@ -76,22 +118,21 @@ class _TestViewState extends State<TestView> {
           ),
         ],
       ),
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          Container(
-            width: double.infinity,
-            height: 420,
-            decoration: BoxDecoration(
-              color: Colors.grey[300], // 배경 색상 (실제 지도는 나중에 교체)
-            ),
-            child: Center(
-              child: Text(
-                '지도 영역',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
+          Expanded(
+            // 구글맵
+            child: GoogleMap(
+              onMapCreated: _onMapCreated,
+              // 카메라 포지션(처음 잡는 곳
+              initialCameraPosition: CameraPosition(
+                // 현재 좌표로 고정한 _center로 11 화면 고정.
+                target: _center,
+                zoom: 11.0,
               ),
+              // 마커도 현재 화면
+              markers: _markers,
             ),
           ),
           Padding(
@@ -103,9 +144,9 @@ class _TestViewState extends State<TestView> {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0x30000000),
+                    color: const Color(0x30000000),
                     blurRadius: 4,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
@@ -115,16 +156,16 @@ class _TestViewState extends State<TestView> {
                   Text(
                     '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
                     style: TextStyle(
-                      color: Color(0xFF24252C),
+                      color: const Color(0xFF24252C),
                       fontSize: 11,
                       fontFamily: 'Lexend Deca',
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
                     style: TextStyle(
-                      color: Color(0xFF24252C),
+                      color: const Color(0xFF24252C),
                       fontSize: 11,
                       fontFamily: 'Lexend Deca',
                     ),
@@ -133,35 +174,9 @@ class _TestViewState extends State<TestView> {
               ),
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
         ],
       ),
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.white, // 하단 네비게이션 바의 배경색
-      //   selectedItemColor: Color(0xEF537052), // 선택된 아이템의 색상
-      //   unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: '홈',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.search),
-      //       label: '검색',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.menu),
-      //       label: '메뉴',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: '마이페이지',
-      //     ),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onItemTapped,
-      // ),
     );
   }
 }

@@ -39,6 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   firebase_core: ^3.2.0
   firebase_auth: ^5.1.2
+  firebase_database: ^11.0.4
   cloud_firestore: ^5.1.0
   flutter_lints: ^4.0.0
   google_sign_in: ^6.2.1
@@ -50,6 +51,17 @@ dependencies:
   kakao_flutter_sdk_friend: ^1.9.5 # 피커 API 패키지
   kakao_flutter_sdk_navi: ^1.9.5 # 카카오내비 API 패키지
   flutter_naver_login: ^1.8.0
+  crypto: ^3.0.0 #비밀번호 해시화 패키지
+  provider: ^6.1.2
+  kakao_map_plugin: ^0.3.1
+  flutter_dotenv: ^5.1.0
+  shared_preferences: ^2.0.8 #세션처리 패키지
+  webview_flutter_wkwebview: ^3.14.0
+  webview_flutter: ^4.8.0
+  webview_flutter_android: ^3.16.6
+  google_maps_flutter: ^2.9.0
+  google_maps_flutter_web: ^0.5.10
+  location: ^7.0.0
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +88,7 @@ flutter:
     - assets/Google logo.png
     - assets/sos_button.png
     - assets/naver.png
+    - .env
   fonts:
     - family: BM_HANNA_TTF
       fonts:
