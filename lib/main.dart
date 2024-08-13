@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:pro_max_ject/screen/login_screen.dart';
 import 'package:pro_max_ject/screen/map.dart';
 import 'package:pro_max_ject/screen/signup.dart';
@@ -11,12 +12,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
+
 Future<void> main() async {
   // Flutter 엔진을 초기화
   WidgetsFlutterBinding.ensureInitialized();
 
   // 카카오맵 테스트
-  // await dotenv.load(fileName: '.env');
+  await dotenv.load(fileName: ".env");
+  AuthRepository.initialize(
+    appKey: dotenv.env['APP_KEY'] ?? '');
 
   // Kakao SDK 초기화
   KakaoSdk.init(
@@ -35,8 +39,7 @@ Future<void> main() async {
 
   // runApp(MapPage());
   runApp(
-  ChangeNotifierProvider(
-  create: (context) => IndexProvider(),
+  ChangeNotifierProvider(create: (context) => IndexProvider(),
   child: MyApp(isLoggedIn: isLoggedIn),
   ));
 }
@@ -60,3 +63,46 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// import 'package:flutter/material.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+//
+// void main() => runApp(const MyApp());
+//
+// class MyApp extends StatefulWidget {
+//   const MyApp({Key? key}) : super(key: key);
+//
+//   @override
+//   _MyAppState createState() => _MyAppState();
+// }
+//
+// class _MyAppState extends State<MyApp> {
+//   late GoogleMapController mapController;
+//
+//   final LatLng _center = const LatLng(45.521563, -122.677433);
+//
+//   void _onMapCreated(GoogleMapController controller) {
+//     mapController = controller;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Maps Sample App'),
+//           backgroundColor: Colors.green[700],
+//         ),
+//         body: GoogleMap(
+//           onMapCreated: _onMapCreated,
+//           initialCameraPosition: CameraPosition(
+//             target: _center,
+//             zoom: 11.0,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
