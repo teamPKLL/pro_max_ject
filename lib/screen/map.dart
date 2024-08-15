@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
 
 void main() {
@@ -31,22 +31,19 @@ class TestView extends StatefulWidget {
 }
 
 class _TestViewState extends State<TestView> {
-  // 현재 위치 찍기
   double lat = 0;
   double lng = 0;
   Location location = Location();
   bool _serviceEnabled = true;
-  PermissionStatus? _permissionGranted;
-  late GoogleMapController mapController;
-  late LatLng _center;
-  late Set<Marker> _markers;
+  late PermissionStatus _permissionGranted;
+  Set<Marker> markers = {}; // 마커 변수
+  late KakaoMapController mapController;
+  late LatLng currentLatLng;
 
   @override
   void initState() {
     super.initState();
-    _center = const LatLng(37.445884, 126.651960); // Default location
-    _markers = {};
-    _locateMe(); // Get the current location when the widget is initialized
+    _locateMe(); // 현재 위치를 가져와 지도에 마커를 찍고, 지도 중심을 이동
   }
 
   Future<void> _locateMe() async {
@@ -66,34 +63,26 @@ class _TestViewState extends State<TestView> {
       }
     }
 
-    final LocationData locationData = await location.getLocation();
+    final locationData = await location.getLocation();
     setState(() {
-      lat = locationData.latitude ?? 0.0;
-      lng = locationData.longitude ?? 0.0;
-      _center = LatLng(lat, lng);
-      _markers = {
+      lat = locationData.latitude!;
+      lng = locationData.longitude!;
+      currentLatLng = LatLng(lat, lng);
+
+      // 현재 위치에 마커 추가
+      markers.add(
         Marker(
-          markerId: const MarkerId('current_location'),
-          position: _center,
+          markerId: UniqueKey().toString(),
+          latLng: currentLatLng,
         ),
-      };
+      );
 
-
+      // 맵 컨트롤러가 있다면 지도 중심을 현재 위치로 이동
       if (mapController != null) {
-        mapController.animateCamera(
-          CameraUpdate.newLatLng(_center),
-        );
+        mapController.setCenter(currentLatLng);
       }
-      // 현재위치 끝
     });
   }
-
-  // 구글 맵 끌어오기
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    _locateMe(); // 현재 주소 받아오기
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +102,7 @@ class _TestViewState extends State<TestView> {
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
-              // Handle notification action
+              // 알림 버튼 클릭 시 동작
             },
           ),
         ],
@@ -122,17 +111,14 @@ class _TestViewState extends State<TestView> {
       body: Column(
         children: [
           Expanded(
-            // 구글맵
-            child: GoogleMap(
-              onMapCreated: _onMapCreated,
-              // 카메라 포지션(처음 잡는 곳
-              initialCameraPosition: CameraPosition(
-                // 현재 좌표로 고정한 _center로 11 화면 고정.
-                target: _center,
-                zoom: 11.0,
-              ),
-              // 마커도 현재 화면
-              markers: _markers,
+            child: KakaoMap(
+              onMapCreated: (controller) {
+                mapController = controller;
+                // 지도 생성 후 현재 위치 가져오기
+                _locateMe();
+              },
+              markers: markers.toList(),
+              center: LatLng(lat, lng), // 초기 위치는 현재 위치
             ),
           ),
           Padding(
@@ -142,30 +128,30 @@ class _TestViewState extends State<TestView> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
-                    color: const Color(0x30000000),
+                    color: Color(0x30000000),
                     blurRadius: 4,
-                    offset: const Offset(0, 5),
+                    offset: Offset(0, 5),
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const [
                   Text(
                     '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
                     style: TextStyle(
-                      color: const Color(0xFF24252C),
+                      color: Color(0xFF24252C),
                       fontSize: 11,
                       fontFamily: 'Lexend Deca',
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Text(
                     '폭염주의보 지속 발효 중. 부모님께 안부전화드리기, 야외활동 자제, 폭염 안전 수칙(물, 그늘, 휴식) 준수 등 건강관리에 유의 바랍니다. [인천광역시]',
                     style: TextStyle(
-                      color: const Color(0xFF24252C),
+                      color: Color(0xFF24252C),
                       fontSize: 11,
                       fontFamily: 'Lexend Deca',
                     ),
