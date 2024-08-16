@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+import 'package:pro_max_ject/api/disaster_provider.dart';
 import 'package:pro_max_ject/screen/login_screen.dart';
 import 'package:pro_max_ject/screen/map.dart';
 import 'package:pro_max_ject/screen/signup.dart';
@@ -39,9 +40,16 @@ Future<void> main() async {
 
   // runApp(MapPage());
   runApp(
-  ChangeNotifierProvider(create: (context) => IndexProvider(),
-  child: MyApp(isLoggedIn: isLoggedIn),
-  ));
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => IndexProvider()),
+        ChangeNotifierProvider(create: (context) => DisasterProvider()), // DisasterProvider 추가
+        // 다른 Provider가 있다면 여기에 추가
+      ],
+      child: MyApp(isLoggedIn: isLoggedIn),
+    ),
+  );
+
 }
   // runApp(MyApp());
 
