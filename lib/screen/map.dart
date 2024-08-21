@@ -58,6 +58,8 @@ class _MapPageState extends State<MapPage> {
         Marker(
           markerId: UniqueKey().toString(),
           latLng: currentLatLng,
+          markerImageSrc:
+          'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
         ),
       );
       print("위도 : $lat");
@@ -66,6 +68,7 @@ class _MapPageState extends State<MapPage> {
       // 맵 컨트롤러가 있다면 지도 중심을 현재 위치로 이동
       if (mapController != null) {
         mapController.setCenter(currentLatLng);
+        mapController.setLevel(5); // 지도 줌 레벨 설정 (필요에 따라 조정)
       }
     });
 
@@ -77,22 +80,23 @@ class _MapPageState extends State<MapPage> {
     final provider = Provider.of<ShelterProvider>(context, listen: false);
     try {
       // 대피소를 검색하여 마커를 추가합니다.
-      await provider.searchShelters(pageNo: 1, numOfRows: 10); // 필요한 페이지 번호와 개수로 호출
+      await provider.searchShelters(pageNo: 1, numOfRows: 1000); // 필요한 페이지 번호와 개수로 호출
 
-      // 대피소 마커를 추가합니다.
+      // 대피소를 현재 위치 기준으로 필터링
       final loadedShelters = provider.shelters;
-      setState(() {
-        shelters = loadedShelters;
-        for (var shelter in shelters) {
-          final distance = Geolocator.distanceBetween(
-            lat,
-            lng,
-            shelter.latitude,
-            shelter.longitude,
-          );
-          shelter.distance = distance; // 거리 저장
-        }
+      final filteredShelters = loadedShelters.where((shelter) {
+        final distance = Geolocator.distanceBetween(
+          lat,
+          lng,
+          shelter.latitude,
+          shelter.longitude,
+        );
+        shelter.distance = distance; // 거리 저장
+        return distance <= 1000; // 1킬로미터 이내의 대피소만 필터링
+      }).toList();
 
+      setState(() {
+        shelters = filteredShelters;
         markers.addAll(
           shelters.map(
                 (shelter) => Marker(
@@ -101,12 +105,6 @@ class _MapPageState extends State<MapPage> {
             ),
           ),
         );
-
-        // 지도 중심을 대피소가 있는 위치로 이동할 수 있습니다.
-        if (shelters.isNotEmpty) {
-          final firstShelter = shelters.first;
-          mapController.setCenter(LatLng(firstShelter.latitude, firstShelter.longitude));
-        }
       });
     } catch (e) {
       print('Error loading shelters: $e');

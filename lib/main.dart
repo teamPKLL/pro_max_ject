@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:pro_max_ject/api/disaster_provider.dart';
+import 'package:pro_max_ject/api/news_provider.dart';
 import 'package:pro_max_ject/api/shelter_provider.dart';
 import 'package:pro_max_ject/screen/login_screen.dart';
 import 'package:pro_max_ject/screen/map.dart';
@@ -47,6 +48,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => DisasterProvider()), // DisasterProvider 추가
         // 다른 Provider가 있다면 여기에 추가
         ChangeNotifierProvider(create: (context) => ShelterProvider()),
+        ChangeNotifierProvider(create: (context) => DisasterNewsProvider()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
