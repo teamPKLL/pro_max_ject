@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
 import 'package:pro_max_ject/screen/map.dart';
+import 'package:pro_max_ject/screen/notice.dart';
 import 'package:pro_max_ject/screen/reminder.dart';
 import 'package:pro_max_ject/screen/sos.dart';
 import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
@@ -126,7 +127,12 @@ class _MainState extends State<Main> {
               ),
               //////////////////////// 1번째 공지부분 //////////////////////////
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Notice()),
+                  );
+                },
                 child: Container(
                   width: width * 0.9,
                   height: height * 0.05,

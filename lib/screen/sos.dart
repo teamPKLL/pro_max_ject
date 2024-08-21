@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
+import 'package:pro_max_ject/services/location_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -17,9 +18,9 @@ _sendingMails() async {
 }
 
 // SMS 보내기 함수
-_sendingSMS(double lat, double lng) async {
+_sendingSMS(double lat, double lng, String address) async {
   var url = Uri.parse(
-      "sms:119?body=긴급 상황입니다. 제 현재 위치는 위도: $lat, 경도: $lng 입니다.");
+      "sms:01056766769?body=긴급 상황입니다. \n\n제 현재 위치는 \n위도: $lat, \n경도: $lng 입니다. \n주소: $address");
   if (await canLaunchUrl(url)) {
     await launchUrl(url);
   } else {
@@ -47,7 +48,9 @@ class SosPage extends StatefulWidget {
 class _SosPageState extends State<SosPage> {
   double lat = 0;
   double lng = 0;
+  String _address = '';
   Location location = Location();
+  LocationService _locationService = LocationService();
   Set<Marker> markers = {};
   late KakaoMapController mapController;
   int _selectedIndex = 0; // 현재 선택된 인덱스
@@ -97,7 +100,22 @@ class _SosPageState extends State<SosPage> {
       if (mapController != null) {
         mapController.setCenter(currentLatLng);
       }
+
+      _getAddress(lat, lng);  // 도로명 주소 가져오기
     });
+  }
+
+  Future<void> _getAddress(double lat, double lng) async {
+    final addressData = await _locationService.getAddressFromCoordinates(lat, lng);
+    if (addressData != null) {
+      setState(() {
+        _address = '${addressData['region1']} ${addressData['region2']} ${addressData['region3']}, ${addressData['address']}';
+      });
+    } else {
+      setState(() {
+        _address = '주소를 찾을 수 없습니다.';
+      });
+    }
   }
 
   void _onMedicalInfoTapped() {
@@ -169,7 +187,7 @@ class _SosPageState extends State<SosPage> {
           Positioned(
             bottom: 45, // 하얀 박스 위에 조금 겹치도록 조정
             left: MediaQuery.of(context).size.width / 2 - 65.5, // 버튼을 중앙에 배치
-            child: Group78(lat: lat, lng: lng), // lat과 lng 전달
+            child: Group78(lat: lat, lng: lng, address: _address), // lat, lng, address 전달
           ),
 
           // 흰색 작은 박스 (의료정보 버튼)
@@ -217,8 +235,9 @@ class _SosPageState extends State<SosPage> {
 class Group78 extends StatelessWidget {
   final double lat;
   final double lng;
+  final String address;
 
-  Group78({required this.lat, required this.lng});
+  Group78({required this.lat, required this.lng, required this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -315,7 +334,7 @@ class Group78 extends StatelessWidget {
                               if (value == 1) {
                                 _sendingMails(); // 전화 걸기
                               } else if (value == 2) {
-                                _sendingSMS(lat, lng); // SMS 보내기
+                                _sendingSMS(lat, lng, address); // SMS 보내기
                               } else {
                                 print("Option null selected");
                               }
