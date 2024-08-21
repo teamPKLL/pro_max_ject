@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pro_max_ject/screen/sos.dart';
 import 'package:provider/provider.dart';
 
 import '../map.dart';

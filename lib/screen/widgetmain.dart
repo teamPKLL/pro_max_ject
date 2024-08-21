@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+import 'package:location/location.dart';
 import 'package:pro_max_ject/screen/map.dart';
 import 'package:pro_max_ject/screen/reminder.dart';
+import 'package:pro_max_ject/screen/sos.dart';
 import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +30,54 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
+  double lat = 0;
+  double lng = 0;
+  Location location = Location();
+  Set<Marker> markers = {};
+  late KakaoMapController mapController;
+
+  @override
+  void initState() {
+    super.initState();
+    _locateMe();
+  }
+
+  Future<void> _locateMe() async {
+    bool _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    PermissionStatus _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    final locationData = await location.getLocation();
+    setState(() {
+      lat = locationData.latitude!;
+      lng = locationData.longitude!;
+      LatLng currentLatLng = LatLng(lat, lng);
+
+      markers.add(
+        Marker(
+          markerId: UniqueKey().toString(),
+          latLng: currentLatLng,
+        ),
+      );
+
+      if (mapController != null) {
+        mapController.setCenter(currentLatLng);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -147,13 +198,48 @@ class _MainState extends State<Main> {
                             blurRadius: 4,
                             offset: Offset(0, 4),
                             spreadRadius: 0,
-                          )
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(45),
+                            child: KakaoMap(
+                              onMapCreated: (controller) {
+                                mapController = controller;
+                                _locateMe();
+                              },
+                              markers: markers.toList(),
+                              center: LatLng(lat, lng),
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(45),
+                                onTap: () {
+                                  context.read<IndexProvider>().setIndex(0);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => MapPage()),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SosWidget()),
+                      );
+                    },
                     child: Container(
                       width: width * 0.4,
                       height: width * 0.4,
@@ -201,7 +287,7 @@ class _MainState extends State<Main> {
                       blurRadius: 4,
                       offset: Offset(0, 5),
                       spreadRadius: 0,
-                    )
+                    ),
                   ],
                 ),
                 child: InkWell(
@@ -243,7 +329,7 @@ class _MainState extends State<Main> {
                       blurRadius: 4,
                       offset: Offset(0, 5),
                       spreadRadius: 0,
-                    )
+                    ),
                   ],
                 ),
                 child: InkWell(
