@@ -60,6 +60,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
+
   const MyApp({super.key, required this.isLoggedIn});
 
   @override

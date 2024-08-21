@@ -19,6 +19,7 @@ class DisasterProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get hasMore => _hasMore;
 
+
   // 전체 데이터를 한 번에 로드하는 메서드
   Future<void> loadAllDisasterMessages() async {
     if (_isLoading) return; // 이미 로딩 중이면 중복 호출 방지

@@ -1,3 +1,4 @@
+
 class DisasterNews {
   final String ynaNo;
   final String ynaTitle;
