@@ -70,9 +70,15 @@ class NoticeBox extends StatefulWidget {
 
 class _NoticeBoxState extends State<NoticeBox> {
   bool _isOpen = false;
+  double _angle = 0.0;
   void _toggleOpen(){
     setState(() {
       _isOpen = !_isOpen;
+    });
+  }
+  void _iconRotate(){
+    setState(() {
+      _angle = ((_angle==0) ? -0.25 : 0);
     });
   }
   @override
@@ -113,13 +119,17 @@ class _NoticeBoxState extends State<NoticeBox> {
               Container(
                 width: 30,
                 height: 30,
-                child: IconButton(
-                  icon: Transform.rotate(
-                    angle:  _isOpen ? -0.5 * 3.14159 : 0.0,
-                    child: const Icon(Icons.arrow_back_ios_new, size: 15,)
-                  ),
-                  color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
-                  onPressed: _toggleOpen
+                child: AnimatedRotation(
+                  duration: Duration(milliseconds: 200),
+                  turns: _angle,
+                  curve: Curves.easeInOut,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new, size: 15,),
+                    color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
+                    onPressed: (){
+                      _toggleOpen();
+                      _iconRotate();
+                    }),
                 )
               )
             ],
