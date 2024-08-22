@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
+import 'package:pro_max_ject/screen/widgetmain.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +19,17 @@ class Notice extends StatelessWidget {
         appBar: AppBar(
           title: const Center(child: Text('공지사항')),
           backgroundColor: const Color(0xFFF0F1F0),
+
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              context.read<IndexProvider>().setIndex(1);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>FigmaToCodeApp()),
+              );
+            },
+          ),
         ),
         body: NoticeBodyWidget(),
       ),

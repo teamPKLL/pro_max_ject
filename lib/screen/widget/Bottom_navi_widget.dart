@@ -40,21 +40,21 @@ class _MainScreenState extends State<MainScreen> {
         unselectedItemColor: Colors.grey,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.message_outlined),
-            label: '지도',
+            icon: Icon(Icons.map_rounded),
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: '홈',
+            label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '검색',
+            icon: Icon(Icons.notifications),
+            label: '',
           ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: '마이페이지',
+            label: '',
           ),
         ],
         currentIndex: selectedIndex,
