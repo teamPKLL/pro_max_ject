@@ -14,8 +14,14 @@ class Notice extends StatelessWidget {
       debugShowCheckedModeBanner: false, // 디버그 배너 제거
       home: Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text('공지사항')),
+          title: const Center(
+            child: Text('공지사항'),
+          ),
           backgroundColor: const Color(0xFFF0F1F0),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){},
+          ),
         ),
         body: NoticeBodyWidget(),
       ),
