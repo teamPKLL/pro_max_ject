@@ -1,48 +1,46 @@
-// class Shelter_map {
-//  late String ctprvn_nm; // 시도명
-//  late String sgg_nm; // 시군구명
-//  late String vt_acmdfclty_nm; // 시설명
-//  late String rdnmadr_cd; // 도로명 주소 코드.
-//  late String xcord;  // 경도
-//  late String ycord; // 위도
-//  late String acmdfclty_se_nm; // 지진옥외대피장소 유형 구분
-//  late String rn_adres; // 도로명 주소
-//
-//  // 생성자
-//  Shelter_map( {
-//    required this.ctprvn_nm,
-//    required this.sgg_nm,
-//    required this.vt_acmdfclty_nm,
-//    required this.rdnmadr_cd,
-//    required this.xcord,
-//    required this.ycord,
-//    required this.acmdfclty_se_nm,
-//    required this.rn_adres,
-//   });
-//
-//  /// User 객체를 JSON으로 변환
-//  Map<String, dynamic> toJson() {
-//    return {
-//      'ctprvn_nm': ctprvn_nm,
-//      'sgg_nm': sgg_nm,
-//      'vt_acmdfclty_nm': vt_acmdfclty_nm,
-//      'rdnmadr_cd' : rdnmadr_cd,
-//      'xcord' : xcord,
-//      'ycord' : ycord,
-//      'acmdfclty_se_nm' : acmdfclty_se_nm,
-//      'rn_adres' : rn_adres,
-//    };
-//  }
-//
-//  /// JSON을 User 객체로 변환
-//  factory Shelter_map.fromJson(Map<String, dynamic> json) {
-//    return Shelter_map(
-//      ctprvn_nm: json['ctprvn_nm'] as String,
-//      sgg_nm: json['sgg_nm'] as String,
-//      vt_acmdfclty_nm: json['vt_acmdfclty_nm'] as String,
-//        rdnmadr_cd: json['rdnmadr_cd'] as String,
-//
-//    );
-//  }
-//
-// }
+class Shelter {
+  final String name;        // 대피소명
+  final double latitude;    // 위도
+  final double longitude;   // 경도
+  final String address;     // 도로명주소 또는 상세주소
+  final String type;        // 대피소 유형
+  final String code;        // 대피소 구분 코드
+  double? distance;         // 거리 필드 추가
+
+  Shelter({
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
+    required this.type,
+    required this.code,
+    this.distance,
+  });
+
+  factory Shelter.fromCivilDefense(Map<String, dynamic> json) {
+    String type = json['FCLT_SE'] as String? ?? 'Unknown';
+    if (type == '0' || type.toLowerCase() == 'unknown') {
+      type = '민방위 대피소';
+    }
+
+    return Shelter(
+      name: json['SHLT_NM'] as String? ?? 'Unknown',
+      latitude: (json['LAT'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['LOT'] as num?)?.toDouble() ?? 0.0,
+      address: json['ROAD_NM_ADDR'] as String? ?? json['DADDR'] as String? ?? 'Unknown',
+      type: type,
+      code: json['FCLT_SE'] as String? ?? 'Unknown',
+    );
+  }
+
+  factory Shelter.fromDisaster(Map<String, dynamic> json) {
+    return Shelter(
+      name: json['REARE_NM'] as String? ?? 'Unknown',
+      latitude: (json['LAT'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['LOT'] as num?)?.toDouble() ?? 0.0,
+      address: json['RONA_DADDR'] as String? ?? 'Unknown',
+      type: json['SHLT_SE_NM'] as String? ?? 'Unknown',
+      code: json['SHLT_SE_CD'] as String? ?? 'Unknown',
+    );
+  }
+}

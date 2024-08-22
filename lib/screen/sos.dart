@@ -1,7 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+import 'package:location/location.dart';
+import 'package:pro_max_ject/services/location_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(SosWidget());
+}
+
+_sendingMails() async {
+  var url = Uri.parse("tel:01056766769");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+// SMS 보내기 함수
+_sendingSMS(double lat, double lng, String address) async {
+  var url = Uri.parse(
+      "sms:01056766769?body=긴급 상황입니다. \n\n제 현재 위치는 \n위도: $lat, \n경도: $lng 입니다. \n주소: $address");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }
 
 class SosWidget extends StatelessWidget {
@@ -22,12 +46,77 @@ class SosPage extends StatefulWidget {
 }
 
 class _SosPageState extends State<SosPage> {
+  double lat = 0;
+  double lng = 0;
+  String _address = '';
+  Location location = Location();
+  LocationService _locationService = LocationService();
+  Set<Marker> markers = {};
+  late KakaoMapController mapController;
   int _selectedIndex = 0; // 현재 선택된 인덱스
+
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // 선택된 인덱스 업데이트
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _locateMe();
+  }
+
+  Future<void> _locateMe() async {
+    bool _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    PermissionStatus _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    final locationData = await location.getLocation();
+    setState(() {
+      lat = locationData.latitude!;
+      lng = locationData.longitude!;
+      LatLng currentLatLng = LatLng(lat, lng);
+
+      markers.add(
+        Marker(
+          markerId: UniqueKey().toString(),
+          latLng: currentLatLng,
+        ),
+      );
+
+      if (mapController != null) {
+        mapController.setCenter(currentLatLng);
+      }
+
+      _getAddress(lat, lng);  // 도로명 주소 가져오기
+    });
+  }
+
+  Future<void> _getAddress(double lat, double lng) async {
+    final addressData = await _locationService.getAddressFromCoordinates(lat, lng);
+    if (addressData != null) {
+      setState(() {
+        _address = '${addressData['region1']} ${addressData['region2']} ${addressData['region3']}, ${addressData['address']}';
+      });
+    } else {
+      setState(() {
+        _address = '주소를 찾을 수 없습니다.';
+      });
+    }
   }
 
   void _onMedicalInfoTapped() {
@@ -47,15 +136,6 @@ class _SosPageState extends State<SosPage> {
             fontFamily: 'BM_HANNA_TTF',
           ),
         ),
-
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.account_box, color: Colors.white),
-        //     onPressed: () {
-        //       // Handle notification action
-        //     },
-        //   ),
-        // ],
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -74,8 +154,16 @@ class _SosPageState extends State<SosPage> {
           Column(
             children: [
               Expanded(
-                child: Center(
-                  child: Text('지도는 여기에 표시됩니다.'),
+                child: KakaoMap(
+                  onMapCreated: (controller) {
+                    mapController = controller;
+
+                    // 지도 생성 후 현재 위치 가져오기
+                    _locateMe();
+                  },
+                  markers: markers.toList(),
+                  center: LatLng(lat, lng), // 초기 위치는 현재 위치
+
                 ),
               ),
               Container(
@@ -100,7 +188,7 @@ class _SosPageState extends State<SosPage> {
           Positioned(
             bottom: 45, // 하얀 박스 위에 조금 겹치도록 조정
             left: MediaQuery.of(context).size.width / 2 - 65.5, // 버튼을 중앙에 배치
-            child: Group78(),
+            child: Group78(lat: lat, lng: lng, address: _address), // lat, lng, address 전달
           ),
 
           // 흰색 작은 박스 (의료정보 버튼)
@@ -130,9 +218,9 @@ class _SosPageState extends State<SosPage> {
                   child: Text(
                     '* 의료정보',
                     style: TextStyle(
-                        color: Color(0xFFD32E24),
-                        fontSize: 15,
-                        fontFamily: "BM_HANNA_TTF"
+                      color: Color(0xFFD32E24),
+                      fontSize: 15,
+                      fontFamily: "BM_HANNA_TTF",
                     ),
                   ),
                 ),
@@ -141,36 +229,17 @@ class _SosPageState extends State<SosPage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white, // 하단 네비게이션 바의 배경색
-        selectedItemColor: Color(0xEF537052), // 선택된 아이템의 색상
-        unselectedItemColor: Colors.grey, // 선택되지 않은 아이템의 색상
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '검색',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '메뉴',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '마이페이지',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
 
 class Group78 extends StatelessWidget {
+  final double lat;
+  final double lng;
+  final String address;
+
+  Group78({required this.lat, required this.lng, required this.address});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -217,44 +286,72 @@ class Group78 extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 13.63,
-                    top: 13.63,
+                    left: 8,
+                    top: 8,
                     child: Container(
-                      width: 81.75,
-                      height: 81.75,
-                      decoration: ShapeDecoration(
-                        gradient: RadialGradient(
-                          center: Alignment(0, 1),
-                          radius: 0,
-                          colors: [Color(0xFFFFAD59), Color(0xFFFF7E7B)],
-                        ),
-                        shape: OvalBorder(),
-                        shadows: [
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
                           BoxShadow(
-                            color: Color(0xFFFFFFFF),
-                            blurRadius: 47.37,
-                            offset: Offset(-23.68, -23.68),
-                            spreadRadius: 0,
+                            color: Colors.black.withOpacity(0.3), // 그림자 색상 및 투명도
+                            blurRadius: 6.0, // 흐림 효과 반경 (크기 줄임)
+                            offset: Offset(0, 3), // 그림자의 오프셋 (살짝 줄임)
                           ),
-                          BoxShadow(
-                            color: Color(0x7FAAAACC),
-                            blurRadius: 47.37,
-                            offset: Offset(23.68, 23.68),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x3FAAAACC),
-                            blurRadius: 23.68,
-                            offset: Offset(11.84, 11.84),
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: Color(0x7FFFFFFF),
-                            blurRadius: 23.68,
-                            offset: Offset(-11.84, -11.84),
-                            spreadRadius: 0,
-                          )
                         ],
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.orangeAccent, // 그라데이션 시작 색상
+                            Colors.redAccent, // 그라데이션 끝 색상
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: ClipOval( // 원형의 형태로 잘라주는 역할
+                        child: Container(
+                          width: 90.75, // 아이콘 크기
+                          height: 90.75, // 아이콘 크기
+                          child: PopupMenuButton<int>(
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.orangeAccent, // 그라데이션 시작 색상
+                                    Colors.redAccent, // 그라데이션 끝 색상
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.circle,
+                                color: Colors.transparent, // 내부 아이콘의 색상을 투명하게 설정
+                                size: 90.75, // 아이콘 크기
+                              ),
+                            ),
+                            onSelected: (value) {
+                              // 팝업 메뉴에서 선택된 항목에 따라 동작을 정의
+                              if (value == 1) {
+                                _sendingMails(); // 전화 걸기
+                              } else if (value == 2) {
+                                _sendingSMS(lat, lng, address); // SMS 보내기
+                              } else {
+                                print("Option null selected");
+                              }
+                            },
+                            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                              PopupMenuItem<int>(
+                                value: 1,
+                                child: Text('119 긴급전화'),
+                              ),
+                              PopupMenuItem<int>(
+                                value: 2,
+                                child: Text('119 긴급 메시지'),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -267,5 +364,3 @@ class Group78 extends StatelessWidget {
     );
   }
 }
-
-
