@@ -55,7 +55,7 @@ class _SosPageState extends State<SosPage> {
   late KakaoMapController mapController;
   int _selectedIndex = 0; // 현재 선택된 인덱스
 
-  
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index; // 선택된 인덱스 업데이트
