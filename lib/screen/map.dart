@@ -127,14 +127,6 @@ class _MapPageState extends State<MapPage> {
         ),
         backgroundColor: const Color(0xEF537052),
         elevation: 4,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              // 알림 버튼 클릭 시 동작
-            },
-          ),
-        ],
       ),
       resizeToAvoidBottomInset: false,
       body: Column(

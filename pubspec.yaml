@@ -98,6 +98,8 @@ flutter:
     - assets/Google logo.png
     - assets/sos_button.png
     - assets/naver.png
+    - assets/idea.png
+    - assets/letter.png
     - .env
   fonts:
     - family: BM_HANNA_TTF

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
+import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
+import 'package:pro_max_ject/screen/widgetmain.dart';
 import 'package:pro_max_ject/services/location_service.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -135,6 +138,16 @@ class _SosPageState extends State<SosPage> {
             color: Colors.white,
             fontFamily: 'BM_HANNA_TTF',
           ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<IndexProvider>().setIndex(1);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>FigmaToCodeApp()),
+            );
+          },
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
