@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-void main() async{
-  runApp(const Notice());
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  runApp(const Notice());
 }
 
 class Notice extends StatelessWidget {
@@ -11,8 +11,12 @@ class Notice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false, // 디버그 배너 제거
       home: Scaffold(
-        appBar: AppBar( title: const Center(child: Text('공지사항')), backgroundColor: const Color(0xFFF0F1F0),),
+        appBar: AppBar(
+          title: const Center(child: Text('공지사항')),
+          backgroundColor: const Color(0xFFF0F1F0),
+        ),
         body: NoticeBodyWidget(),
       ),
     );
@@ -28,13 +32,11 @@ class NoticeBodyWidget extends StatelessWidget {
       padding: EdgeInsets.all(20),
       width: double.infinity,
       color: const Color(0xFFF0F1F0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: ListView(
         children: [
           NoticeBox(
-            title: '테스트',
-            content: '테스트 내용입니다. 더 상세한 내용은 안녕하세요 입니다. 이게 무슨 말인지는 모르겠고 그냥 이것 저것 나열하는 중입니다. 이 정도 길이면 충분하지 않을까요'
+              title: '테스트',
+              content: '테스트 내용입니다. 더 상세한 내용은 안녕하세요 입니다. 이게 무슨 말인지는 모르겠고 그냥 이것 저것 나열하는 중입니다. 이 정도 길이면 충분하지 않을까요'
           ),
           NoticeBox(
             title: 'main 공지',
@@ -71,20 +73,23 @@ class NoticeBox extends StatefulWidget {
 class _NoticeBoxState extends State<NoticeBox> {
   bool _isOpen = false;
   double _angle = 0.0;
-  void _toggleOpen(){
+
+  void _toggleOpen() {
     setState(() {
       _isOpen = !_isOpen;
     });
   }
-  void _iconRotate(){
+
+  void _iconRotate() {
     setState(() {
-      _angle = ((_angle==0) ? -0.25 : 0);
+      _angle = (_angle == 0) ? -0.25 : 0;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 351,
+      width: MediaQuery.of(context).size.width - 40, // 화면 너비에서 padding을 제외한 너비
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
       decoration: ShapeDecoration(
@@ -92,65 +97,57 @@ class _NoticeBoxState extends State<NoticeBox> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        shadows:  const [
+        shadows: const [
           BoxShadow(
             color: Color(0x3F000000),
             blurRadius: 4,
-            offset: Offset(0,4),
+            offset: Offset(0, 4),
             spreadRadius: 0,
           )
-        ]
+        ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(7, 0, 0, 0),
-                child: Text(widget.title,
-                  style: TextStyle(
-                    color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
-                    fontSize: 20,
-                  ),
+              Text(
+                widget.title,
+                style: TextStyle(
+                  color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
+                  fontSize: 20,
                 ),
               ),
-              Container(
-                width: 30,
-                height: 30,
-                child: AnimatedRotation(
+              IconButton(
+                icon: AnimatedRotation(
                   duration: Duration(milliseconds: 200),
                   turns: _angle,
                   curve: Curves.easeInOut,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new, size: 15,),
-                    color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
-                    onPressed: (){
-                      _toggleOpen();
-                      _iconRotate();
-                    }),
-                )
-              )
+                  child: Icon(Icons.arrow_back_ios_new, size: 15),
+                ),
+                color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
+                onPressed: () {
+                  _toggleOpen();
+                  _iconRotate();
+                },
+              ),
             ],
           ),
           Divider(
-            color: (widget.theme == Colors.white) ? Color(0xFFD4D4D4) : Color(0xFF8BA38A), // Color of the divider
-            thickness: 2,       // Thickness of the line
-            height: 20,         // Space around the divider
+            color: (widget.theme == Colors.white) ? Color(0xFFD4D4D4) : Color(0xFF8BA38A),
+            thickness: 2,
+            height: 20,
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(7, 0, 7, 0),
-            child: Text(
-              _isOpen ? widget.content : widget.content.substring(0, 25) + '...' ,
-              style: TextStyle(
-                color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
-              ),
-            )
+          Text(
+            _isOpen ? widget.content : widget.content.substring(0, 25) + '...',
+            style: TextStyle(
+              color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
+            ),
           ),
         ],
-      )
+      ),
     );
   }
 }
