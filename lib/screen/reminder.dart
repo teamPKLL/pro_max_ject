@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pro_max_ject/api/disaster_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import '../api/disaster_provider.dart';
 
 class Reminder extends StatefulWidget {
   @override
@@ -9,18 +9,39 @@ class Reminder extends StatefulWidget {
 }
 
 class _ReminderState extends State<Reminder> {
+  late ScrollController _scrollController;
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // 페이지가 다시 보일 때마다 데이터 로드 호출
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()
+      ..addListener(() {
+        // 스크롤이 끝까지 내려갔을 때
+        if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+          _loadMoreData();
+        }
+      });
+    // 초기 데이터 로드
     _loadData();
   }
 
-  Future<void> _loadData() async {
-    final provider = Provider.of<DisasterProvider>(context, listen: false);
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-    // API 호출을 진행 중인 상태인지 확인
+  Future<void> _loadData({bool refresh = false}) async {
+    final provider = Provider.of<DisasterProvider>(context, listen: false);
     if (!provider.isLoading) {
+      await provider.loadDisasterMessages(refresh: refresh);
+    }
+  }
+
+  Future<void> _loadMoreData() async {
+    final provider = Provider.of<DisasterProvider>(context, listen: false);
+    if (!provider.isLoading && provider.hasMore) {
+      await Future.delayed(Duration(seconds: 1));
       await provider.loadDisasterMessages();
     }
   }
@@ -40,29 +61,38 @@ class _ReminderState extends State<Reminder> {
               IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
-                  _loadData();
+                  _loadData(refresh: true);
                 },
               ),
             ],
           ),
-          body: provider.disasterMessages.isEmpty && provider.isLoading
+          body: provider.isLoading && provider.disasterMessages.isEmpty
               ? Center(child: CircularProgressIndicator())
-              : provider.disasterMessages.isEmpty && !provider.isLoading
+              : provider.disasterMessages.isEmpty
               ? Center(child: Text('No disaster messages found'))
-              : ListView(
+              : ListView.builder(
+            controller: _scrollController,
             padding: EdgeInsets.zero,
-            children: [
-              ...provider.disasterMessages.map((message) {
-                final index = provider.disasterMessages.indexOf(message);
-                return buildReminderBox(
-                  top: MediaQuery.of(context).size.height * 0.12 + (index * MediaQuery.of(context).size.height * 0.11),
-                  screenWidth: MediaQuery.of(context).size.width,
-                  screenHeight: MediaQuery.of(context).size.height,
-                  text: '[${message.rcptnRgnNm}] ${message.msgCn}',
-                  registrationDate: message.regYmd,
-                );
-              }).toList(),
-            ],
+            itemCount: provider.disasterMessages.length + 1,
+            itemBuilder: (context, index) {
+              if (index == provider.disasterMessages.length) {
+                // 마지막 아이템일 때 추가 로딩 인디케이터 표시
+                if (provider.hasMore) {
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                  return SizedBox.shrink(); // 더 이상 데이터가 없으면 빈 위젯 반환
+                }
+              }
+
+              final message = provider.disasterMessages[index];
+              return buildReminderBox(
+                top: MediaQuery.of(context).size.height * 0.12 + (index * MediaQuery.of(context).size.height * 0.11),
+                screenWidth: MediaQuery.of(context).size.width,
+                screenHeight: MediaQuery.of(context).size.height,
+                text: '[${message.rcptnRgnNm}] ${message.msgCn}',
+                registrationDate: message.regYmd,
+              );
+            },
           ),
         );
       },

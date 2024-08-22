@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
+import 'package:pro_max_ject/screen/disaster_news.dart';
 import 'package:pro_max_ject/screen/map.dart';
 import 'package:pro_max_ject/screen/notice.dart';
 import 'package:pro_max_ject/screen/reminder.dart';
@@ -155,27 +156,70 @@ class _MainState extends State<Main> {
               ),
               SizedBox(height: height * 0.02),
               //////////////////////// 재해 방안(큰 2번째 목록) ////////////////////////
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  width: width * 0.9,
-                  height: height * 0.2,
-                  margin: EdgeInsets.symmetric(horizontal: width * 0.04),
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      context.read<IndexProvider>().setIndex(0);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MapPage()),
+                      );
+                    },
+                    child: Container(
+                      width: width * 0.4,
+                      height: width * 0.4,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(45),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
                     ),
-                    shadows: [
-                      BoxShadow(
-                        color: Color(0x3F000000),
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
                   ),
-                ),
+                  //---------뉴스페이지-----------------------------------
+                  InkWell(
+                    onTap: () {
+                      context.read<IndexProvider>().setIndex(1); // 1로 설정 (추가적인 설정에 따라 조정 가능)
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DisasterNewsPage()),
+                      );
+                    },
+                    child: Container(
+                      width: width * 0.4,
+                      height: width * 0.4,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(0.00, -1.00),
+                          end: Alignment(0, 1),
+                          colors: [Color(0xFFFDD8C3), Color(0xFFFF8873)],
+                        ),
+                        borderRadius: BorderRadius.circular(45),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(45),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: height * 0.02),
               //////////////////////// 지도 위치와 SOS 위치 ////////////////////////
