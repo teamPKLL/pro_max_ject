@@ -12,7 +12,16 @@ class Notice extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar( title: const Center(child: Text('공지사항')), backgroundColor: const Color(0xFFF0F1F0),),
+        appBar: AppBar(
+          title: const Center(
+            child: Text('공지사항'),
+          ),
+          backgroundColor: const Color(0xFFF0F1F0),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){},
+          ),
+        ),
         body: NoticeBodyWidget(),
       ),
     );
