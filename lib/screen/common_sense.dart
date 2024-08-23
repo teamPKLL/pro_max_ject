@@ -14,7 +14,7 @@ class CommonSense extends StatelessWidget {
       theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
       ),
-      home: CommonScreen(),
+      home: const CommonScreen(),
     );
   }
 }
@@ -25,28 +25,25 @@ class CommonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // centerTitle: true,
-        title: const Text(
-          '재난 상식',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'BM_HANNA_TTF',
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // 현재 화면을 종료하고 이전 화면으로 돌아가기
-          },
-        ),
-        backgroundColor: const Color(0xEF537052),
-        elevation: 4,
-      ),
       backgroundColor: const Color(0xFFF0F1F0),
       body: Column(
         children: [
-          const SizedBox(height: 20,),
+          const SizedBox(height: 20),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '재난 상식',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'BM_HANNA_TTF',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -56,12 +53,52 @@ class CommonScreen extends StatelessWidget {
                 mainAxisSpacing: 10, // 아이템 사이의 세로 간격
                 childAspectRatio: 1.4, // 박스 비율
                 children: const [
-                  CommonItem(title: '폭염', imageUrl: 'assets/heatwave.png'),
-                  CommonItem(title: '침수', imageUrl: 'assets/flooding.png'),
-                  CommonItem(title: '태풍, 호우', imageUrl: 'assets/typhoon.png'),
-                  CommonItem(title: '지진', imageUrl: 'assets/earthquake.png'),
-                  CommonItem(title: '홍수', imageUrl: 'assets/flood.png'),
-                  CommonItem(title: '대설', imageUrl: 'assets/snow.png'),
+                  CommonItem(
+                    title: '폭염',
+                    imageUrls: [
+                      'assets/heatwave/heatwave1.png',
+                      'assets/heatwave/heatwave2.png',
+                      'assets/heatwave/heatwave3.png',
+                    ],
+                  ),
+                  CommonItem(
+                    title: '대설',
+                    imageUrls: [
+                      'assets/heavysnow/heavysnow1.jpg',
+                      'assets/heavysnow/heavysnow2.jpg',
+                      'assets/heavysnow/heavysnow3.jpg',
+                    ],
+                  ),
+                  CommonItem(
+                    title: '태풍, 호우',
+                    imageUrls: [
+                      'assets/typhoon/typhoon1.jpg',
+                      'assets/typhoon/typhoon2.jpg',
+                      'assets/typhoon/typhoon3.jpg',
+                    ],
+                  ),
+                  CommonItem(
+                    title: '황사',
+                    imageUrls: [
+                      'assets/yellowdust/yelliwdust1.png',
+                      'assets/yellowdust/yellowdust2.png',
+                    ],
+                  ),
+                  CommonItem(
+                    title: '홍수',
+                    imageUrls: [
+                      'assets/flooding/flooding1.png',
+                      'assets/flooding/flooding2.png',
+                      'assets/flooding/flooding3.png',
+                    ],
+                  ),
+                  CommonItem(
+                    title: '한파',
+                    imageUrls: [
+                      'assets/coldwave/coldwave1.jpg',
+                      'assets/coldwave/coldwave2.jpg',
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -72,11 +109,31 @@ class CommonScreen extends StatelessWidget {
   }
 }
 
-class CommonItem extends StatelessWidget {
+class CommonItem extends StatefulWidget {
   final String title;
-  final String imageUrl;
+  final List<String> imageUrls;
 
-  const CommonItem({super.key, required this.title, required this.imageUrl});
+  const CommonItem({super.key, required this.title, required this.imageUrls});
+
+  @override
+  _CommonItemState createState() => _CommonItemState();
+}
+
+class _CommonItemState extends State<CommonItem> {
+  int _currentPage = 0;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +143,46 @@ class CommonItem extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text(title),
+              title: Text(widget.title),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(imageUrl), // 이미지 표시
+                  SizedBox(
+                    height: 200,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: widget.imageUrls.length,
+                      onPageChanged: (int page) {
+                        setState(() {
+                          _currentPage = page;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        return Image.asset(widget.imageUrls[index]);
+                      },
+                    ),
+                  ),
                   const SizedBox(height: 10),
-                  Text(
-                    '여기에 관련 정보를 추가할 수 있습니다.',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      widget.imageUrls.length,
+                          (index) => Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                        width: _currentPage == index ? 12.0 : 8.0,
+                        height: _currentPage == index ? 12.0 : 8.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _currentPage == index
+                              ? Colors.blue
+                              : Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    ' ',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -137,14 +226,14 @@ class CommonItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              widget.title,
               style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontFamily: 'BM_HANNA_TTF'
+                fontSize: 18,
+                color: Colors.black,
+                fontFamily: 'BM_HANNA_TTF',
               ),
             ),
-            Align(
+            const Align(
               alignment: Alignment.bottomRight,
               child: Icon(
                 Icons.arrow_forward_ios_rounded,
