@@ -12,8 +12,17 @@ class DisasterNewsPage extends StatelessWidget {
     });
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF0F1F0),
       appBar: AppBar(
-        title: Text('재난 뉴스'),
+        title: Text(
+            '재난 뉴스',
+            style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'BM_HANNA_TTF',
+        ),
+        ),
+        backgroundColor: const Color(0xEF537052),
+        elevation: 4,
       ),
       body: Consumer<DisasterNewsProvider>(
         builder: (context, provider, child) {
@@ -40,6 +49,7 @@ class DisasterNewsPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: InkWell(
+
                   onTap: () {
                     Navigator.push(
                       context,
@@ -75,6 +85,7 @@ class DisasterNewsPage extends StatelessWidget {
                             news.ynaYmd, // 연합뉴스일자 필드 표시
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Colors.grey[500],
+                              // fontFamily: 'BM_HANNA_TTF',
                             ),
                           ),
                         ),

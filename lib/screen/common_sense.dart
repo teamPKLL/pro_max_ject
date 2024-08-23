@@ -25,24 +25,27 @@ class CommonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // centerTitle: true,
+        title: const Text(
+          '재난 상식',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'BM_HANNA_TTF',
+          ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // 현재 화면을 종료하고 이전 화면으로 돌아가기
+          },
+        ),
+        backgroundColor: const Color(0xEF537052),
+        elevation: 4,
+      ),
       backgroundColor: const Color(0xFFF0F1F0),
       body: Column(
         children: [
-          const SizedBox(height: 20,),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '재난 상식',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'BM_HANNA_TTF',
-                ),
-              ),
-            ],
-          ),
           const SizedBox(height: 20,),
           Expanded(
             child: Padding(
@@ -68,6 +71,7 @@ class CommonScreen extends StatelessWidget {
     );
   }
 }
+
 class CommonItem extends StatelessWidget {
   final String title;
   final String imageUrl;
