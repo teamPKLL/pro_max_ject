@@ -91,15 +91,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/login_icon.png
-    - assets/login_icon.jpg
-    - assets/Facbook.png
-    - assets/kakao.png
-    - assets/Google logo.png
-    - assets/sos_button.png
-    - assets/naver.png
-    - assets/idea.png
-    - assets/letter.png
+    - assets/
     - .env
   fonts:
     - family: BM_HANNA_TTF

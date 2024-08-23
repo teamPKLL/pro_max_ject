@@ -66,7 +66,7 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
         return Scaffold(
           backgroundColor: Color(0xFFF0F1F0),
           appBar: AppBar(
-            title: Text('알림'),
+            title: Text('재난 문자 알림'),
             centerTitle: true,
             backgroundColor: Colors.grey[200],
             elevation: 0,
