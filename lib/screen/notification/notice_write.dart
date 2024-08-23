@@ -59,8 +59,15 @@ class _TitleInputBoxState extends State<TitleInputBox> {
       margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
       child: TextField(
         controller: _controller,
+        cursorColor: const Color(0xFF537052),
         decoration: InputDecoration(
           labelText: 'title',
+          labelStyle: const TextStyle(
+            color: Colors.grey, // 기본 상태의 labelText 색상
+          ),
+          floatingLabelStyle: const TextStyle(
+            color: const Color(0xFF537052), // 활성화(포커스) 상태에서의 labelText 색상
+          ),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
           ),
@@ -72,6 +79,7 @@ class _TitleInputBoxState extends State<TitleInputBox> {
               ),
             ),
         ),
+
       )
     );
   }
@@ -93,6 +101,7 @@ class _ContentInputBoxState extends State<ContentInputBox> {
         padding: EdgeInsets.zero,
         margin: EdgeInsets.fromLTRB(30, 10, 30, 30),
         child: TextField(
+          cursorColor: const Color(0xFF537052),
           controller: _controller,
           keyboardType: TextInputType.multiline,
           maxLines: 10,
