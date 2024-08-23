@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pro_max_ject/screen/notice.dart';
+import 'package:pro_max_ject/screen/notification//notice.dart';
 import 'package:pro_max_ject/screen/widget/BaseNoticeBox.dart';
 
 void main() async {

@@ -3,7 +3,7 @@ import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
 import 'package:pro_max_ject/screen/disaster_news.dart';
 import 'package:pro_max_ject/screen/map.dart';
-import 'package:pro_max_ject/screen/notice.dart';
+import 'package:pro_max_ject/screen/notification//notice.dart';
 import 'package:pro_max_ject/screen/reminder.dart';
 import 'package:pro_max_ject/screen/sos.dart';
 import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
