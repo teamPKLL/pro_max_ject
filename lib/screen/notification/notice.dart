@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pro_max_ject/screen/widget/BaseNoticeBox.dart';
+import 'package:provider/provider.dart';
+
+import '../widget/IndexProvider.dart';
+import '../widgetmain.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,19 +26,31 @@ class Notice extends StatelessWidget {
 }
 
 class NoticeAppBar extends StatelessWidget implements PreferredSizeWidget {
+
   final String title;
   const NoticeAppBar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title:  Text(title),
+      title:  Text(title,
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: 'BM_HANNA_TTF',
+        )),
       centerTitle : true,
       automaticallyImplyLeading: false,
-      backgroundColor: const Color(0xFFF0F1F0),
+      backgroundColor: Color(0xEF537052),
+      elevation: 4,
       leading: IconButton(
         icon: Icon(Icons.arrow_back),
-        onPressed: (){},
+        onPressed: () {
+          context.read<IndexProvider>().setIndex(1);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>FigmaToCodeApp()),
+          );
+        },
       ),
     );
   }
