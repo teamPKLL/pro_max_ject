@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 void main() {
-  runApp(CommonSense());
+  runApp(const CommonSense());
 }
 
 class CommonSense extends StatelessWidget {
-  const CommonSense({super.key});
+  const CommonSense({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +25,28 @@ class CommonScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(
+          '재난 상식',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: width * 0.06,
+            fontFamily: 'BM_HANNA_TTF',
+          ),
+        ),
+        centerTitle : true,
+        backgroundColor: Color(0xEF537052),
+        elevation: 4,
+      ),
       backgroundColor: const Color(0xFFF0F1F0),
       body: Column(
         children: [
-          const SizedBox(height: 20),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '재난 상식',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'BM_HANNA_TTF',
-                ),
-              ),
-            ],
-          ),
           const SizedBox(height: 20),
           Expanded(
             child: Padding(
@@ -144,52 +148,40 @@ class _CommonItemState extends State<CommonItem> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(widget.title),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 200,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: widget.imageUrls.length,
-                      onPageChanged: (int page) {
-                        setState(() {
-                          _currentPage = page;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        return Image.asset(widget.imageUrls[index]);
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      widget.imageUrls.length,
-                          (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                        width: _currentPage == index ? 12.0 : 8.0,
-                        height: _currentPage == index ? 12.0 : 8.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentPage == index
-                              ? Colors.blue
-                              : Colors.grey,
-                        ),
+              content: SizedBox(
+                height: 250,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: widget.imageUrls.length,
+                        onPageChanged: (int page) {
+                          setState(() {
+                            _currentPage = page;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return Image.asset(widget.imageUrls[index]);
+                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    ' ',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontFamily: 'BM_HANNA_TTF',
+                    const SizedBox(height: 10),
+                    SmoothPageIndicator(
+                      controller: _pageController,
+                      count: widget.imageUrls.length,
+                      effect: WormEffect(
+                        activeDotColor: Colors.blue,
+                        dotColor: Colors.grey,
+                        dotHeight: 8,
+                        dotWidth: 8,
+                        spacing: 8,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               actions: [
                 TextButton(
@@ -204,8 +196,8 @@ class _CommonItemState extends State<CommonItem> {
         );
       },
       child: Container(
-        width: 100, // 박스의 너비
-        height: 100, // 박스의 높이
+        width: 100,
+        height: 100,
         padding: const EdgeInsets.all(12.0),
         decoration: ShapeDecoration(
           color: Colors.white,
@@ -218,7 +210,7 @@ class _CommonItemState extends State<CommonItem> {
               blurRadius: 4,
               offset: Offset(0, 5),
               spreadRadius: 0,
-            )
+            ),
           ],
         ),
         child: Column(

@@ -21,6 +21,7 @@ class DisasterNewsPage extends StatelessWidget {
             fontFamily: 'BM_HANNA_TTF',
         ),
         ),
+        centerTitle: true,
         backgroundColor: const Color(0xEF537052),
         elevation: 4,
       ),
