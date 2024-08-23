@@ -115,26 +115,23 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF0F1F0),
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '이재난녕',
           style: TextStyle(
             color: Colors.white,
+            fontSize: width * 0.06,
             fontFamily: 'BM_HANNA_TTF',
           ),
         ),
         backgroundColor: const Color(0xEF537052),
         elevation: 4,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              // 알림 버튼 클릭 시 동작
-            },
-          ),
-        ],
       ),
       resizeToAvoidBottomInset: false,
       body: Column(

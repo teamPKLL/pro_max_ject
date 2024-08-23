@@ -8,8 +8,9 @@ class Reminder extends StatefulWidget {
   _ReminderState createState() => _ReminderState();
 }
 
-class _ReminderState extends State<Reminder> {
+class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<Reminder> {
   late ScrollController _scrollController;
+  bool _isDisposed = false; // dispose 상태를 확인하기 위한 플래그
 
   @override
   void initState() {
@@ -22,11 +23,16 @@ class _ReminderState extends State<Reminder> {
         }
       });
     // 초기 데이터 로드
-    _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _loadData();
+      }
+    });
   }
 
   @override
   void dispose() {
+    _isDisposed = true; // 위젯이 dispose되었음을 표시
     _scrollController.dispose();
     super.dispose();
   }
@@ -35,6 +41,9 @@ class _ReminderState extends State<Reminder> {
     final provider = Provider.of<DisasterProvider>(context, listen: false);
     if (!provider.isLoading) {
       await provider.loadDisasterMessages(refresh: refresh);
+      if (mounted && !_isDisposed) {
+        setState(() {}); // 상태 업데이트
+      }
     }
   }
 
@@ -43,17 +52,21 @@ class _ReminderState extends State<Reminder> {
     if (!provider.isLoading && provider.hasMore) {
       await Future.delayed(Duration(seconds: 1));
       await provider.loadDisasterMessages();
+      if (mounted && !_isDisposed) {
+        setState(() {}); // 상태 업데이트
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);  // AutomaticKeepAliveClientMixin의 기능 활성화
     return Consumer<DisasterProvider>(
       builder: (context, provider, child) {
         return Scaffold(
           backgroundColor: Color(0xFFF0F1F0),
           appBar: AppBar(
-            title: Text('알림'),
+            title: Text('재난 문자 알림'),
             centerTitle: true,
             backgroundColor: Colors.grey[200],
             elevation: 0,
@@ -98,6 +111,9 @@ class _ReminderState extends State<Reminder> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Widget buildReminderBox({
     required double top,

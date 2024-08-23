@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
-import 'package:pro_max_ject/screen/disaster_news.dart';
-import 'package:pro_max_ject/screen/map.dart';
-import 'package:pro_max_ject/screen/notification//notice.dart';
-import 'package:pro_max_ject/screen/reminder.dart';
-import 'package:pro_max_ject/screen/sos.dart';
-import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
 import 'package:provider/provider.dart';
+
+import '../api/disaster_provider.dart';
+import 'common_sense.dart';
+import 'disaster_news.dart';
+import 'map.dart';
+import 'package:pro_max_ject/screen/notification//notice.dart';
+import 'reminder.dart';
+import 'sos.dart';
+import 'widget/IndexProvider.dart';
 
 class FigmaToCodeApp extends StatelessWidget {
   const FigmaToCodeApp({super.key});
