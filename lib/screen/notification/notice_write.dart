@@ -34,8 +34,8 @@ class NoticeWriteBodyWidget extends StatelessWidget {
           ContentInputBox(),
           RowDate(property: 'createdAt', value: '20240823'),
           RowDate(property: 'updatedAt', value: '20240823'),
-          TextBtnWidthInfinity(text: '저장', theme: true,),
-          TextBtnWidthInfinity(text: '취소', ),
+          TextBtnWidthInfinity(text: '저장', onPressed: (){}, theme: true,),
+          TextBtnWidthInfinity(text: '취소', onPressed: (){}, ),
         ],
       ),
     );
@@ -166,9 +166,11 @@ class RowDate extends StatelessWidget {
 class TextBtnWidthInfinity extends StatelessWidget {
   final String text;
   final bool theme;
+  final VoidCallback onPressed;
   const TextBtnWidthInfinity({
     super.key,
     required this.text,
+    required this.onPressed,
     this.theme = false,
   });
 
@@ -187,7 +189,7 @@ class TextBtnWidthInfinity extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: onPressed,
         child: Text(text,
           style: TextStyle(
             color: theme ? Colors.white : const Color(0xFF537052),
