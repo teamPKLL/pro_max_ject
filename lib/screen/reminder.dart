@@ -10,11 +10,12 @@ class Reminder extends StatefulWidget {
 
 class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<Reminder> {
   late ScrollController _scrollController;
-  bool _isDisposed = false; // dispose 상태를 확인하기 위한 플래그
+  bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
+    _loadData(refresh: true);
     _scrollController = ScrollController()
       ..addListener(() {
         // 스크롤이 끝까지 내려갔을 때
@@ -22,17 +23,11 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
           _loadMoreData();
         }
       });
-    // 초기 데이터 로드
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _loadData();
-      }
-    });
   }
 
   @override
   void dispose() {
-    _isDisposed = true; // 위젯이 dispose되었음을 표시
+    _isDisposed = true;
     _scrollController.dispose();
     super.dispose();
   }
@@ -60,25 +55,21 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);  // AutomaticKeepAliveClientMixin의 기능 활성화
+    super.build(context);
     return Consumer<DisasterProvider>(
       builder: (context, provider, child) {
         return Scaffold(
           backgroundColor: Color(0xFFF0F1F0),
           appBar: AppBar(
-            title: Text('재난 문자 알림',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'BM_HANNA_TTF',
-                )),
-            backgroundColor: Color(0xEF537052),
-            elevation: 4,
+            title: Text('알림'),
             centerTitle: true,
+            backgroundColor: Colors.grey[200],
+            elevation: 0,
             actions: [
               IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
-                  _loadData(refresh: true);
+                  _loadData(refresh: true); // 새로고침 시 데이터 로드
                 },
               ),
             ],
@@ -93,7 +84,6 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
             itemCount: provider.disasterMessages.length + 1,
             itemBuilder: (context, index) {
               if (index == provider.disasterMessages.length) {
-                // 마지막 아이템일 때 추가 로딩 인디케이터 표시
                 if (provider.hasMore) {
                   return Center(child: CircularProgressIndicator());
                 } else {
