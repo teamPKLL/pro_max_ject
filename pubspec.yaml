@@ -93,6 +93,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/heatwave/
+    - assets/heavysnow/
+    - assets/flooding/
+    - assets/coldwave/
+    - assets/typhoon/
+    - assets/yellowdust/
     - .env
   fonts:
     - family: BM_HANNA_TTF
