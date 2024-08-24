@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../repositories/user_repository.dart';
 import '../models/user.dart';
@@ -47,9 +48,22 @@ class UserService {
     String hashedPassword = HashUtil.hashPassword(password);
     User? user = await _userRepository.authenticateUser(id, hashedPassword);
     if (user != null) {
+      // 로그인 성공 시 사용자 정보를 shared_preferences에 저장
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userId', id);
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('userName', user.name); // 사용자 이름 저장
       return null; // 로그인 성공
     } else {
       return '아이디 또는 비밀번호가 잘못되었습니다.'; // 로그인 실패
     }
+  }
+
+  // 로그아웃 메서드
+  Future<void> logoutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
+    await prefs.remove('isLoggedIn');
+    await prefs.remove('userName'); // 사용자 이름 제거
   }
 }

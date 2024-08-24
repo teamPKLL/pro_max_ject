@@ -53,6 +53,26 @@ dependencies:
   flutter_naver_login: ^1.8.0
   crypto: ^3.0.0 #비밀번호 해시화 패키지
   provider: ^6.1.2
+  kakao_map_plugin: ^0.3.1
+  flutter_dotenv: ^5.1.0
+  shared_preferences: ^2.0.8 #세션처리 패키지
+  webview_flutter_wkwebview: ^3.14.0
+  webview_flutter: ^4.8.0
+  webview_flutter_android: ^3.16.6
+  google_maps_flutter: ^2.9.0
+  google_maps_flutter_web: ^0.5.10
+  location: ^7.0.0
+  http: ^1.2.2
+  open_settings: ^2.0.2
+  app_settings: ^4.1.0
+  intl: ^0.19.0
+  flutter_kakao_maps_sdk : ^0.3.0
+  fluttertoast: ^8.2.8
+  geolocator: ^12.0.0
+  url_launcher: ^6.3.0
+  flutter_webview_plugin: ^0.4.0
+  smooth_page_indicator: ^1.2.0+3
+
 
 dev_dependencies:
   flutter_test:
@@ -72,13 +92,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/login_icon.png
-    - assets/login_icon.jpg
-    - assets/Facbook.png
-    - assets/kakao.png
-    - assets/Google logo.png
-    - assets/sos_button.png
-    - assets/naver.png
+    - assets/
+    - .env
   fonts:
     - family: BM_HANNA_TTF
       fonts:

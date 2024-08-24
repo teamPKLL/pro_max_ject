@@ -42,7 +42,7 @@ class KakaoLogin implements SocialLogin {
   }
 
 // Future<void> kakaoLogin() async {
-
+//
 // try {
 //   // 카카오톡으로 로그인 시도
 //   if (await isKakaoTalkInstalled()) {
