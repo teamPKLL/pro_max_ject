@@ -26,8 +26,6 @@ class CommonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final width = size.width;
-    final height = size.height;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -36,12 +34,12 @@ class CommonScreen extends StatelessWidget {
           '재난 상식',
           style: TextStyle(
             color: Colors.white,
-            fontSize: width * 0.06,
+            fontSize: size.width * 0.06,
             fontFamily: 'BM_HANNA_TTF',
           ),
         ),
-        centerTitle : true,
-        backgroundColor: Color(0xEF537052),
+        centerTitle: true,
+        backgroundColor: const Color(0xEF537052),
         elevation: 4,
       ),
       backgroundColor: const Color(0xFFF0F1F0),
@@ -52,10 +50,10 @@ class CommonScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: GridView.count(
-                crossAxisCount: 2, // 열의 개수
-                crossAxisSpacing: 10, // 아이템 사이의 가로 간격
-                mainAxisSpacing: 10, // 아이템 사이의 세로 간격
-                childAspectRatio: 1.4, // 박스 비율
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.4,
                 children: const [
                   CommonItem(
                     title: '폭염',
@@ -149,12 +147,11 @@ class _CommonItemState extends State<CommonItem> {
             return AlertDialog(
               title: Text(widget.title),
               content: SizedBox(
-                height: 250,
+                width: double.maxFinite,
+                height: 300, // 높이를 고정하여 레이아웃을 안정화합니다.
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      height: 200,
+                    Expanded(
                       child: PageView.builder(
                         controller: _pageController,
                         itemCount: widget.imageUrls.length,
@@ -164,7 +161,10 @@ class _CommonItemState extends State<CommonItem> {
                           });
                         },
                         itemBuilder: (context, index) {
-                          return Image.asset(widget.imageUrls[index]);
+                          return Image.asset(
+                            widget.imageUrls[index],
+                            fit: BoxFit.cover,
+                          );
                         },
                       ),
                     ),
