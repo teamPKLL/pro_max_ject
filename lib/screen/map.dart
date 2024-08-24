@@ -126,7 +126,7 @@ class _MapPageState extends State<MapPage> {
           '이재난녕',
           style: TextStyle(
             color: Colors.white,
-            fontSize: width * 0.06,
+            fontSize: width * 0.07,
             fontFamily: 'BM_HANNA_TTF',
           ),
         ),
