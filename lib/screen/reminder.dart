@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pro_max_ject/api/disaster_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:pro_max_ject/models/disaster_message.dart';
+import 'package:pro_max_ject/services/disaster_service.dart';
+import 'package:pro_max_ject/services/location_service.dart';
 
 class Reminder extends StatefulWidget {
   @override
@@ -10,100 +13,97 @@ class Reminder extends StatefulWidget {
 
 class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<Reminder> {
   late ScrollController _scrollController;
-  bool _isDisposed = false; // dispose 상태를 확인하기 위한 플래그
 
   @override
   void initState() {
     super.initState();
+    _loadData(refresh: true);
     _scrollController = ScrollController()
       ..addListener(() {
-        // 스크롤이 끝까지 내려갔을 때
         if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
           _loadMoreData();
         }
       });
-    // 초기 데이터 로드
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _loadData();
-      }
-    });
   }
 
   @override
   void dispose() {
-    _isDisposed = true; // 위젯이 dispose되었음을 표시
     _scrollController.dispose();
     super.dispose();
   }
 
   Future<void> _loadData({bool refresh = false}) async {
     final provider = Provider.of<DisasterProvider>(context, listen: false);
-    if (!provider.isLoading) {
-      await provider.loadDisasterMessages(refresh: refresh);
-      if (mounted && !_isDisposed) {
-        setState(() {}); // 상태 업데이트
-      }
-    }
+    await provider.loadDisasterMessages(refresh: refresh);
   }
 
   Future<void> _loadMoreData() async {
     final provider = Provider.of<DisasterProvider>(context, listen: false);
-    if (!provider.isLoading && provider.hasMore) {
-      await Future.delayed(Duration(seconds: 1));
-      await provider.loadDisasterMessages();
-      if (mounted && !_isDisposed) {
-        setState(() {}); // 상태 업데이트
-      }
-    }
+    await provider.loadDisasterMessages();
+  }
+
+  void _showFilterDialog() {
+    final provider = Provider.of<DisasterProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return FilterDialog(
+          initialFilters: provider.filters,
+          onApply: (updatedFilters) {
+            provider.filters = updatedFilters;
+            _loadData(refresh: true);
+          },
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);  // AutomaticKeepAliveClientMixin의 기능 활성화
+    super.build(context);
     return Consumer<DisasterProvider>(
       builder: (context, provider, child) {
+        final filteredMessages = provider.disasterMessages;
+
         return Scaffold(
           backgroundColor: Color(0xFFF0F1F0),
           appBar: AppBar(
-            title: Text('재난 문자 알림',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'BM_HANNA_TTF',
-                )),
-            backgroundColor: Color(0xEF537052),
-            elevation: 4,
+            title: Text('알림'),
             centerTitle: true,
+            backgroundColor: Colors.grey[200],
+            elevation: 0,
             actions: [
               IconButton(
+                icon: Icon(Icons.filter_list),
+                onPressed: _showFilterDialog,
+              ),
+              IconButton(
                 icon: Icon(Icons.refresh),
-                onPressed: () {
-                  _loadData(refresh: true);
-                },
+                onPressed: () => _loadData(refresh: true),
               ),
             ],
           ),
-          body: provider.isLoading && provider.disasterMessages.isEmpty
+          body: provider.isLoading && filteredMessages.isEmpty
               ? Center(child: CircularProgressIndicator())
-              : provider.disasterMessages.isEmpty
+              : filteredMessages.isEmpty
               ? Center(child: Text('No disaster messages found'))
               : ListView.builder(
             controller: _scrollController,
             padding: EdgeInsets.zero,
-            itemCount: provider.disasterMessages.length + 1,
+            itemCount: filteredMessages.length + 1,
             itemBuilder: (context, index) {
-              if (index == provider.disasterMessages.length) {
-                // 마지막 아이템일 때 추가 로딩 인디케이터 표시
+              if (index == filteredMessages.length) {
                 if (provider.hasMore) {
                   return Center(child: CircularProgressIndicator());
                 } else {
-                  return SizedBox.shrink(); // 더 이상 데이터가 없으면 빈 위젯 반환
+                  return SizedBox.shrink();
                 }
               }
 
-              final message = provider.disasterMessages[index];
+              final message = filteredMessages[index];
               return buildReminderBox(
-                top: MediaQuery.of(context).size.height * 0.12 + (index * MediaQuery.of(context).size.height * 0.11),
+                top: MediaQuery.of(context).size.height * 0.12 +
+                    (index * MediaQuery.of(context).size.height * 0.11),
                 screenWidth: MediaQuery.of(context).size.width,
                 screenHeight: MediaQuery.of(context).size.height,
                 text: '[${message.rcptnRgnNm}] ${message.msgCn}',
@@ -194,5 +194,83 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
     } catch (e) {
       return dateStr;
     }
+  }
+}
+
+class FilterDialog extends StatefulWidget {
+  final Map<String, bool> initialFilters;
+  final ValueChanged<Map<String, bool>> onApply;
+
+  FilterDialog({required this.initialFilters, required this.onApply});
+
+  @override
+  _FilterDialogState createState() => _FilterDialogState();
+}
+
+class _FilterDialogState extends State<FilterDialog> {
+  late Map<String, bool> _localFilters;
+
+  @override
+  void initState() {
+    super.initState();
+    _localFilters = Map.from(widget.initialFilters);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('재해 구분 필터'),
+      content: Container(
+        width: double.maxFinite,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                itemCount: _localFilters.keys.length,
+                itemBuilder: (context, index) {
+                  final type = _localFilters.keys.elementAt(index);
+                  return Container(
+                    child: CheckboxListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: Text(type),
+                      value: _localFilters[type],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _localFilters[type] = value ?? true;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('취소'),
+        ),
+        TextButton(
+          onPressed: () {
+            widget.onApply(_localFilters);
+            Navigator.of(context).pop();
+          },
+          child: Text('완료'),
+        ),
+      ],
+    );
   }
 }
