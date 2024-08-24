@@ -13,6 +13,7 @@ class Reminder extends StatefulWidget {
 
 class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<Reminder> {
   late ScrollController _scrollController;
+  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -28,6 +29,8 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
 
   @override
   void dispose() {
+    
+    _isDisposed = true;
     _scrollController.dispose();
     super.dispose();
   }
@@ -79,7 +82,9 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
               ),
               IconButton(
                 icon: Icon(Icons.refresh),
+
                 onPressed: () => _loadData(refresh: true),
+
               ),
             ],
           ),
@@ -92,7 +97,9 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
             padding: EdgeInsets.zero,
             itemCount: filteredMessages.length + 1,
             itemBuilder: (context, index) {
+
               if (index == filteredMessages.length) {
+
                 if (provider.hasMore) {
                   return Center(child: CircularProgressIndicator());
                 } else {
@@ -274,3 +281,4 @@ class _FilterDialogState extends State<FilterDialog> {
     );
   }
 }
+
