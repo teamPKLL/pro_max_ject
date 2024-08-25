@@ -4,7 +4,7 @@ import 'package:pro_max_ject/screen/sos.dart';
 import 'package:provider/provider.dart';
 
 import '../map.dart';
-import '../myPage.dart';
+import '../user_page/myPage.dart';
 import '../reminder.dart';
 import '../widgetmain.dart';
 import 'IndexProvider.dart';

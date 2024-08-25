@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pro_max_ject/screen/user_page/myProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/user_service.dart'; // UserService import 추가
+import '../../services/user_service.dart'; // UserService import 추가
 
 class MyPage extends StatelessWidget {
   final UserService _userService = UserService(); // UserService 인스턴스 생성
@@ -50,21 +51,24 @@ class MyPage extends StatelessWidget {
                                 userName,
                                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 25),
                               ),
-                              Container(  // IconButton Wrapper
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                margin: EdgeInsets.all(5),
-                                child: IconButton(
-                                  onPressed: () {
-                                    // 프로필 편집 페이지로 이동 (구현 필요)
-                                  },
-                                  icon: const Icon(Icons.edit_outlined),
-                                  color: Colors.blue, // 아이콘 색상
-                                  iconSize: 24, // 아이콘 크기
-                                ),
-                              ),
+                              // Container(  // IconButton Wrapper
+                              //   decoration: const BoxDecoration(
+                              //     color: Colors.white,
+                              //     shape: BoxShape.circle,
+                              //   ),
+                              //   margin: EdgeInsets.all(5),
+                              //   child: IconButton(
+                              //     onPressed: () {
+                              //       Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(builder: (context) => MyProfile()),
+                              //       );
+                              //     },
+                              //     icon: const Icon(Icons.edit_outlined),
+                              //     color: Colors.blue, // 아이콘 색상
+                              //     iconSize: 24, // 아이콘 크기
+                              //   ),
+                              // ),
                             ],
                           ),
                           Container(  // user description content
@@ -85,6 +89,12 @@ class MyPage extends StatelessWidget {
                         ContentIconRow(
                           icon: Icon(Icons.account_circle),
                           text: "Edit Profile Information",
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyProfile(username: userName,)),
+                            );
+                          },
                         ),
                         ContentIconRow(
                           icon: Icon(Icons.notifications_none),
@@ -101,8 +111,12 @@ class MyPage extends StatelessWidget {
                     ContentBox(
                       children: [
                         ContentIconRow(
-                          icon: Icon(Icons.help),
+                          icon: Icon(Icons.info_outline),
                           text: "Help & Support",
+                        ),
+                        ContentIconRow(
+                          icon: Icon(Icons.help_outline),
+                          text: "FAQ",
                         ),
                         ContentIconRow(
                           icon: Icon(Icons.textsms_outlined),
