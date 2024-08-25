@@ -111,8 +111,12 @@ class MyPage extends StatelessWidget {
                     ContentBox(
                       children: [
                         ContentIconRow(
-                          icon: Icon(Icons.help),
+                          icon: Icon(Icons.info_outline),
                           text: "Help & Support",
+                        ),
+                        ContentIconRow(
+                          icon: Icon(Icons.help_outline),
+                          text: "FAQ",
                         ),
                         ContentIconRow(
                           icon: Icon(Icons.textsms_outlined),
