@@ -2,17 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import '../../firebase_options.dart';
 
-void main() async{
-  runApp(const MyPage());
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp (options : DefaultFirebaseOptions.currentPlatform);
-}
-
-class MyPage extends StatelessWidget {
-  const MyPage({super.key});
+class MyProfile extends StatelessWidget {
+  final String username;
+  const MyProfile({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +24,20 @@ class MyPage extends StatelessWidget {
           elevation: 4,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
-        body: MyProfileBodyWidget(),
+        body: MyProfileBodyWidget(username: username,),
       )
     );
   }
 }
 
 class MyProfileBodyWidget extends StatelessWidget {
-  const MyProfileBodyWidget({super.key});
+  final String username;
+  const MyProfileBodyWidget({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +51,7 @@ class MyProfileBodyWidget extends StatelessWidget {
             margin: EdgeInsets.all(10),
             child: Row(
               children: [
-                Text('user',
+                Text(username, // 회원 이름의 최종 목적지..
                   style: TextStyle(
                     fontFamily: 'BM_HANNA_TTF',
                     fontSize: 20,
@@ -70,7 +67,10 @@ class MyProfileBodyWidget extends StatelessWidget {
               ],
             ),
           ),
-          InputBox(labelText: '이름'),
+          // 각 Input Box에는 innerValue와 controller를 파라미터로 받을 수 있음
+          // innerValue는 기존 회원 정보를 불러 올 때 사용할 수 있다.
+          // controller는 '완료' 버튼을 누를 때 저장하기 위한 장치이다.
+          InputBox(labelText: '이름', innerValue: '홍길동',),
           InputBox(labelText: '전화번호'),
           InputBox(labelText: '생년월일'),
           Container(
@@ -78,7 +78,13 @@ class MyProfileBodyWidget extends StatelessWidget {
             child: Text("※ 위 개인정보는 구조 신호를 보낼 때 더 빠른 구조와 신원 확인을 위해 사용됩니다.")
           ),
           TextBtn(text: '완료', onPressed: (){}, theme: true,),
-          TextBtn(text: '취소', onPressed: (){}, ),
+          TextBtn(
+            text: '취소',
+            onPressed: (){
+              print('TextBtn onPressed called');
+              Navigator.pop(context);
+            },
+          ),
         ],
       ),
     );
@@ -86,15 +92,30 @@ class MyProfileBodyWidget extends StatelessWidget {
 }
 
 class InputBox extends StatefulWidget {
+  final String? innerValue;
+  final TextEditingController? controller; // 외부에서 컨트롤러를 제공할 수 있도록 함
   final String labelText;
-  const InputBox({super.key, required this.labelText});
+  const InputBox({
+    super.key,
+    required this.labelText,
+    this.innerValue,
+    this.controller,
+  });
 
   @override
   State<InputBox> createState() => _InputBoxState();
 }
 
 class _InputBoxState extends State<InputBox> {
-  final TextEditingController _controller = TextEditingController();
+  // final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // 외부에서 제공된 컨트롤러를 사용하거나, 초기 값으로 컨트롤러를 생성
+    _controller = widget.controller ?? TextEditingController(text: widget.innerValue ?? '');
+  }
 
   @override
   void dispose() {
@@ -157,7 +178,10 @@ class TextBtn extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextButton(
-        onPressed: onPressed,
+        onPressed: (){
+          print('TextButton pressed'); // 콜백 호출 여부를 확인
+          onPressed();
+        },
         child: Text(text,
           style: TextStyle(
             color: theme ? Colors.white : const Color(0xFF537052),
