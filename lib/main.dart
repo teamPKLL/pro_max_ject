@@ -44,7 +44,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => IndexProvider()),
+        ChangeNotifierProvider(create: (context) => IndexProvider()) ,
         ChangeNotifierProvider(create: (context) => DisasterProvider()), // DisasterProvider 추가
         // 다른 Provider가 있다면 여기에 추가
         ChangeNotifierProvider(create: (context) => ShelterProvider()),

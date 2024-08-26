@@ -103,12 +103,12 @@ class _MainState extends State<Main> {
           ),
         ),
         backgroundColor: Color(0xFFF0F1F0),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(height: height * 0.02),
-
             // 1번째 공지부분
             InkWell(
               onTap: () {
