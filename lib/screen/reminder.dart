@@ -63,6 +63,8 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     super.build(context);
     return Consumer<DisasterProvider>(
       builder: (context, provider, child) {
@@ -71,9 +73,16 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
         return Scaffold(
           backgroundColor: Color(0xFFF0F1F0),
           appBar: AppBar(
-            title: Text('알림'),
+            title: Text(
+              '재난 상식',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: size.width * 0.06,
+                fontFamily: 'BM_HANNA_TTF',
+              ),
+            ),
             centerTitle: true,
-            backgroundColor: Colors.grey[200],
+            backgroundColor: const Color(0xEF537052),
             elevation: 0,
             actions: [
               IconButton(
