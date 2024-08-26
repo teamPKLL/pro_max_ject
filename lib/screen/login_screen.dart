@@ -40,26 +40,58 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // 삼각형 추가로 하면 좋을듯
-        // 맨 위 바
-        backgroundColor: Color(0xEF537052),
-        centerTitle: true,
-        elevation: 15,
-        toolbarHeight: 180.0, // AppBar의 높이 설정
-      ),
+      // appBar: AppBar(
+      //   // 삼각형 추가로 하면 좋을듯
+      //   // 맨 위 바
+      //   backgroundColor: Color(0xEF537052),
+      //   centerTitle: true,
+      //   elevation: 15,
+      //   toolbarHeight: 180.0, // AppBar의 높이 설정
+      // ),
       backgroundColor: Color(0xFFF0F1F0),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 150), // AppBar와의 간격
-              TextField(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                color: Color(0xEF537052),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 50,
+              child: CustomPaint(
+                painter: TrianglePainter(),
+                child: Container(),
+              ),
+            ),
+            SizedBox(height: 50), // AppBar와의 간격
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: TextField(
                 controller: _idController,
+                cursorColor: Colors.black,
                 decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF537052),
+                      width: 2.0,
+                    ),
+                  ),
                   labelText: 'ID',
+                  floatingLabelStyle: const TextStyle(
+                    color: Color(0xFF537052), // 활성화(포커스) 상태에서의 labelText 색상
+                  ),
                   // 아이디 칸
                   fillColor: Color(0xFFD9DED9),
                   filled: true,
@@ -73,11 +105,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 16), // 조금 간격
-              TextField(
+            ),
+            // SizedBox(height: 16), // 조금 간격
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: TextField(
                 controller: _passwordController,
+                cursorColor: Colors.black,
                 decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF537052),
+                      width: 2.0,
+                    ),
+                  ),
                   labelText: 'Password',
+                  floatingLabelStyle: const TextStyle(
+                    color: Color(0xFF537052), // 활성화(포커스) 상태에서의 labelText 색상
+                  ),
                   // 비밀번호
                   fillColor: Color(0xFFD9DED9),
                   filled: true,
@@ -93,8 +139,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 obscureText: true,
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
+            ),
+            // SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: ElevatedButton(
                 onPressed: _login, // 로그인 버튼을 누르면 _login 메서드를 호출합니다.
                 style: ButtonStyle(
                   backgroundColor:
@@ -112,101 +161,123 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 24), // 버튼과 이미지 사이의 간격
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      onPressed: () async { // 첫 번째 원형 버튼 클릭 동작
-                        print('구글 로그인 누름');
-                        final user = await GoogleSignInProvider().signInWithGoogle();
-                        if (user != null) {
-                          print('Google 로그인 성공: ${user.displayName}');
-                          Navigator.pushReplacementNamed(context, '/main');
-                        }
-                      },
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/Google logo.png'),
-                      ),
+            ),
+            SizedBox(height: 24), // 버튼과 이미지 사이의 간격
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () async { // 첫 번째 원형 버튼 클릭 동작
+                      print('구글 로그인 누름');
+                      final user = await GoogleSignInProvider().signInWithGoogle();
+                      if (user != null) {
+                        print('Google 로그인 성공: ${user.displayName}');
+                        Navigator.pushReplacementNamed(context, '/main');
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage('assets/Google logo.png'),
                     ),
-                    TextButton(
-                      onPressed: () async { // 두 번째 원형 버튼 클릭 동작
-                        print('Naver 로그인버튼 누름');
-                        final result = await NaverSignInProvider().signInWithNaver();
-                        if (result.status == NaverLoginStatus.loggedIn) {
-                          print('Naver 로그인 성공: ${result.account.name}');
-                          Navigator.pushReplacementNamed(context, '/main');
-                        } else {
-                          print('Naver 로그인 실패: ${result.errorMessage}');
-                        }
-                      },
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/naver.png'),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () async { // 세 번째 원형 버튼 클릭 동작
-                        print('카톡로그인버튼 누름');
-                        await viewModel.login(); // 카카오톡 로그인 연동
-                        if (viewModel.isLogined) {  // 로그인 성공시 main 페이지로 이동.
-                          Navigator.pushReplacementNamed(context, '/main');
-                        } else {
-                          print('접근이 허용되지 않았습니다.');
-                        }
-                      },
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/kakao.png'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24),
-              TextButton(  // 비밀번호 찾기 버튼
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ForGot()),
-                  // );
-                },
-                child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    fontSize: 16,
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xEF537052),
                   ),
-                ),
-              ),
-              SizedBox(height: 8),
-              TextButton(  // 가입 버튼
-                onPressed: () {
-                  Navigator.pushNamed(context, '/signup');
-                },
-                child: const Text(
-                  'Sign Up',
-                  style: TextStyle(
-                    fontSize: 16,
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xEF537052),
+                  TextButton(
+                    onPressed: () async { // 두 번째 원형 버튼 클릭 동작
+                      print('Naver 로그인버튼 누름');
+                      final result = await NaverSignInProvider().signInWithNaver();
+                      if (result.status == NaverLoginStatus.loggedIn) {
+                        print('Naver 로그인 성공: ${result.account.name}');
+                        Navigator.pushReplacementNamed(context, '/main');
+                      } else {
+                        print('Naver 로그인 실패: ${result.errorMessage}');
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage('assets/naver.png'),
+                    ),
                   ),
+                  TextButton(
+                    onPressed: () async { // 세 번째 원형 버튼 클릭 동작
+                      print('카톡로그인버튼 누름');
+                      await viewModel.login(); // 카카오톡 로그인 연동
+                      if (viewModel.isLogined) {  // 로그인 성공시 main 페이지로 이동.
+                        Navigator.pushReplacementNamed(context, '/main');
+                      } else {
+                        print('접근이 허용되지 않았습니다.');
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage('assets/kakao.png'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 24),
+            TextButton(  // 비밀번호 찾기 버튼
+              onPressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => ForGot()),
+                // );
+              },
+              child: Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  fontSize: 16,
+                  decoration: TextDecoration.underline,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xEF537052),
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 8),
+            TextButton(  // 가입 버튼
+              onPressed: () {
+                Navigator.pushNamed(context, '/signup');
+              },
+              child: const Text(
+                'Sign Up',
+                style: TextStyle(
+                  fontSize: 16,
+                  decoration: TextDecoration.underline,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xEF537052),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
 
+}
+
+class TrianglePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Color(0xEF537052)
+      ..style = PaintingStyle.fill;
+
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width / 2, size.height)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
 }
