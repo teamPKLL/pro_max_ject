@@ -21,6 +21,7 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
     _loadData(refresh: true);
     _scrollController = ScrollController()
       ..addListener(() {
+        // 스크롤이 끝까지 내려갔을 때
         if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
           _loadMoreData();
         }
@@ -29,7 +30,6 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
 
   @override
   void dispose() {
-    
     _isDisposed = true;
     _scrollController.dispose();
     super.dispose();
@@ -73,27 +73,25 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
         return Scaffold(
           backgroundColor: Color(0xFFF0F1F0),
           appBar: AppBar(
-            title: Text(
-              '재난 상식',
+            title:  Text('알림',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: size.width * 0.06,
                 fontFamily: 'BM_HANNA_TTF',
-              ),
+              )
             ),
             centerTitle: true,
             backgroundColor: const Color(0xEF537052),
             elevation: 0,
             actions: [
               IconButton(
-                icon: Icon(Icons.filter_list),
+                icon: Icon(Icons.filter_list, color: Colors.white,),
                 onPressed: _showFilterDialog,
               ),
               IconButton(
-                icon: Icon(Icons.refresh),
-
-                onPressed: () => _loadData(refresh: true),
-
+                icon: Icon(Icons.refresh, color: Colors.white,),
+                onPressed: () {
+                  _loadData(refresh: true); // 새로고침 시 데이터 로드
+                },
               ),
             ],
           ),
@@ -143,60 +141,48 @@ class _ReminderState extends State<Reminder> with AutomaticKeepAliveClientMixin<
     required String registrationDate,
   }) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: screenWidth * 0.05),
-      height: screenHeight * 0.1,
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        shadows: [
+      width: double.infinity,
+      margin: EdgeInsets.fromLTRB(30, 15, 30, 15),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Colors.white, // 배경색
+        boxShadow: [
           BoxShadow(
             color: Color(0x30000000),
             blurRadius: 4,
             offset: Offset(0, 5),
             spreadRadius: 0,
           ),
-        ],
+        ]
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              right: 0,
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 24),
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    color: Color(0xFF24252C),
-                    fontSize: 11,
-                    fontFamily: 'Lexend Deca',
-                    fontWeight: FontWeight.w400,
-                    height: 1.6,
-                  ),
-                ),
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: double.infinity,
+            child: Text(text,
+              style: const TextStyle(
+                fontSize: 15,
+                fontFamily: 'Lexend Deca',
+              )
             ),
-            Positioned(
-              right: 16,
-              bottom: 8,
-              child: Text(
-                _formatDate(registrationDate),
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 10,
+          ),
+          const SizedBox(height: 6,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children:[
+              Text(_formatDate(registrationDate).toString().substring(0,19),
+                style: const TextStyle(
+                  color: Colors.black38,
+                  fontSize: 13,
                   fontFamily: 'Lexend Deca',
                   fontWeight: FontWeight.w400,
                 ),
-              ),
-            ),
-          ],
-        ),
+              )
+            ]
+          ),
+        ],
       ),
     );
   }
@@ -235,6 +221,7 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: Text('재해 구분 필터'),
       content: Container(
         width: double.maxFinite,
@@ -245,10 +232,11 @@ class _FilterDialogState extends State<FilterDialog> {
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 150,  // 각 아이템의 최대 크기
+                  mainAxisSpacing: 5,       // 세로 방향 간격
+                  crossAxisSpacing: 5,      // 가로 방향 간격
+                  childAspectRatio: 3 / 1,   // 가로와 세로 비율
                 ),
                 itemCount: _localFilters.keys.length,
                 itemBuilder: (context, index) {
@@ -256,7 +244,13 @@ class _FilterDialogState extends State<FilterDialog> {
                   return Container(
                     child: CheckboxListTile(
                       contentPadding: EdgeInsets.all(0),
-                      title: Text(type),
+                      visualDensity: VisualDensity(horizontal: -4.0, vertical: -4.0),
+                      activeColor: Color(0xEF537052),
+                      title: Text(type,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
                       value: _localFilters[type],
                       onChanged: (bool? value) {
                         setState(() {
@@ -274,17 +268,31 @@ class _FilterDialogState extends State<FilterDialog> {
       ),
       actions: [
         TextButton(
+          style: TextButton.styleFrom(
+              overlayColor: Colors.black.withOpacity(0.1),
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('취소'),
+          child: const Text('취소',
+            style: TextStyle(
+              color: Colors.black38,
+            ),
+          ),
         ),
         TextButton(
+          style: TextButton.styleFrom(
+            overlayColor: Colors.black.withOpacity(0.1),
+          ),
           onPressed: () {
             widget.onApply(_localFilters);
             Navigator.of(context).pop();
           },
-          child: Text('완료'),
+          child: const Text('완료',
+            style: TextStyle(
+              color: Color(0xEF537052),
+            ),
+          ),
         ),
       ],
     );
