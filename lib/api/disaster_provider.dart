@@ -148,9 +148,6 @@ class DisasterProvider with ChangeNotifier {
 
     print('Selected types: $selectedTypes');
 
-    _allDisasterMessages.forEach((message) {
-      print('Message type: ${message.dstSeNm}');
-    });
 
     // 필터링된 메시지를 반환하는 로직
     return _allDisasterMessages

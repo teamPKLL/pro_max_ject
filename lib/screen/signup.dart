@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../services/user_service.dart';
 
 class SignUp extends StatefulWidget {
@@ -9,43 +10,98 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  // 텍스트 필드 컨트롤러
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _smsCodeController = TextEditingController();
 
-  // 사용자 서비스 인스턴스
   final UserService _userService = UserService();
+  String _verificationId = '';
 
-  // 회원가입 처리 메서드
   void _registerAccount() async {
-    final String name = _nameController.text;
-    final String id = _idController.text;
+    final String username = _usernameController.text;
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
+    final String p_num = _phoneController.text;
 
-    // 사용자 정보 검증 및 등록
-    String? result = await _userService.validateAndRegisterUser(name, id, password, confirmPassword);
+    String? result = await _userService.validateAndRegisterUser(username, password, confirmPassword, p_num);
     if (result != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result)), // 에러 메시지 표시
+        SnackBar(content: Text(result)),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('회원가입이 완료되었습니다.')), // 성공 메시지 표시
+        SnackBar(content: Text('회원가입이 완료되었습니다.')),
       );
-      Navigator.pop(context); // 회원가입 완료 후 로그인 화면으로 돌아가기
+      Navigator.pop(context);
     }
   }
 
-  // ID 중복 확인 메서드
-  void _checkIdDuplicate() async {
-    final String id = _idController.text;
-    String result = await _userService.checkIdDuplicate(id);
+  void _checkUsernameDuplicate() async {
+    final String username = _usernameController.text;
+    String result = await _userService.checkUsernameDuplicate(username);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(result)), // ID 중복 확인 결과 표시
+      SnackBar(content: Text(result)),
     );
+  }
+
+  void _verifyPhoneNumber() async {
+    final String phoneNumber = _phoneController.text;
+    final String formattedPhoneNumber = _formatPhoneNumber(phoneNumber);
+
+    String? result = await _userService.verifyPhoneNumber(
+      phoneNumber: formattedPhoneNumber,
+      onCodeSent: (String verificationId) {
+        setState(() {
+          _verificationId = verificationId;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('SMS 코드가 전송되었습니다.')),
+        );
+      },
+      onVerificationCompleted: (PhoneAuthCredential credential) async {
+        await _userService.signInWithSmsCode(credential.smsCode!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('전화번호 인증이 자동으로 완료되었습니다.')),
+        );
+      },
+      onVerificationFailed: (FirebaseAuthException e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('전화번호 인증 실패: ${e.message}')),
+        );
+      },
+    );
+
+    if (result != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result)),
+      );
+    }
+  }
+
+  void _signInWithSmsCode() async {
+    final String smsCode = _smsCodeController.text;
+    String? result = await _userService.signInWithSmsCode(smsCode);
+
+    if (result != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('전화번호 인증이 완료되었습니다.')),
+      );
+    }
+  }
+
+  // 전화번호 포맷팅
+  String _formatPhoneNumber(String phoneNumber) {
+    // 예: 한국 번호: 010-1234-5678 -> +821012345678
+    if (phoneNumber.startsWith('0')) {
+      return '+82' + phoneNumber.substring(1).replaceAll('-', '');
+    }
+    return phoneNumber;
   }
 
   @override
@@ -62,13 +118,11 @@ class _SignUpState extends State<SignUp> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
-              _buildTextField(controller: _nameController, label: '이름', icon: Icons.person),
-              const SizedBox(height: 16),
-              _buildTextField(controller: _idController, label: '아이디', icon: Icons.perm_identity),
+              _buildTextField(controller: _usernameController, label: '아이디', icon: Icons.perm_identity),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: _checkIdDuplicate, // ID 중복 확인 버튼
+                  onPressed: _checkUsernameDuplicate,
                   child: const Text(
                     'ID 중복확인',
                     style: TextStyle(color: Color(0xFF537052)),
@@ -79,29 +133,27 @@ class _SignUpState extends State<SignUp> {
               _buildTextField(controller: _passwordController, label: '비밀번호', icon: Icons.lock_outline, obscureText: true),
               const SizedBox(height: 16),
               _buildTextField(controller: _confirmPasswordController, label: '비밀번호 확인', icon: Icons.lock_outline, obscureText: true),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _registerAccount, // 회원가입 버튼
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(const Color(0xFF537052)),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    '가입하기',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              const SizedBox(height: 16),
+              _buildTextField(controller: _phoneController, label: '전화번호', icon: Icons.phone),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: _verifyPhoneNumber,
+                  child: const Text(
+                    '전화번호 인증',
+                    style: TextStyle(color: Color(0xFF537052)),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // 로그인 화면으로 돌아가기
-                },
-                child: const Text(
-                  '로그인으로 돌아가기',
-                  style: TextStyle(fontSize: 16, decoration: TextDecoration.underline, fontWeight: FontWeight.bold, color: Color(0xEF537052)),
+              _buildTextField(controller: _smsCodeController, label: 'SMS 코드', icon: Icons.sms),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _registerAccount,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF537052),
                 ),
+                child: const Text('회원가입'),
               ),
             ],
           ),
@@ -110,25 +162,13 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  // 텍스트 필드 위젯 빌더
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    bool obscureText = false,
-  }) {
+  Widget _buildTextField({required TextEditingController controller, required String label, required IconData icon, bool obscureText = false}) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
-        fillColor: const Color(0xFFD9DED9),
-        filled: true,
-        border: const OutlineInputBorder(),
         prefixIcon: Icon(icon),
-        enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          borderSide: BorderSide(width: 0, color: Color(0x07658064)),
-        ),
+        border: const OutlineInputBorder(),
       ),
       obscureText: obscureText,
     );
