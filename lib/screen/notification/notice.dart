@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pro_max_ject/screen/widget/BaseNoticeBox.dart';
 import 'package:provider/provider.dart';
 
-import '../widget/IndexProvider.dart';
-import '../widgetmain.dart';
+import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
+import 'package:pro_max_ject/screen/widgetmain.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
