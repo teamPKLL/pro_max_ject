@@ -72,43 +72,38 @@ class UserService {
     await prefs.remove('phoneNumber');
   }
 
-  // 전화번호 인증 시작
   Future<String?> verifyPhoneNumber({
     required String phoneNumber,
-    required Function(String) onCodeSent,
-    required Function(PhoneAuthCredential) onVerificationCompleted,
-    required Function(FirebaseAuthException) onVerificationFailed,
+    required Function(String verificationId, int? resendToken) onCodeSent,
+    required Function(PhoneAuthCredential credential) onVerificationCompleted,
+    required Function(FirebaseAuthException e) onVerificationFailed,
   }) async {
     try {
       await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: onVerificationCompleted,
         verificationFailed: onVerificationFailed,
-        codeSent: (String verificationId, int? resendToken) {
-          _verificationId = verificationId;
-          onCodeSent(verificationId);
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          _verificationId = verificationId;
-        },
+        codeSent: onCodeSent,
+        codeAutoRetrievalTimeout: (String verificationId) {},
       );
-      return null;
     } catch (e) {
-      return '전화번호 인증 요청 실패: ${e.toString()}';
+      return 'Phone number verification failed: $e';
     }
+    return null;
   }
 
-  // SMS 코드로 인증 완료
-  Future<String?> signInWithSmsCode(String smsCode) async {
+  Future<String?> signInWithSmsCode(String verificationId, String smsCode) async {
     try {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId,
-        smsCode: smsCode,
-      );
-      await _auth.signInWithCredential(credential);
-      return null;
+      final credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+      final UserCredential authCredential = await _auth.signInWithCredential(credential);
+      if (authCredential.user != null) {
+        // Sign-in successful
+        return null;
+      } else {
+        return 'Sign-in failed';
+      }
     } catch (e) {
-      return 'SMS 코드가 올바르지 않습니다.';
+      return 'Sign-in with SMS code failed: $e';
     }
   }
 }
