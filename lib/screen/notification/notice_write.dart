@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pro_max_ject/screen/notification/notice.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -7,21 +6,51 @@ void main() async {
 }
 
 class NoticeWrite extends StatelessWidget {
-  const NoticeWrite({super.key});
+  final String? title;
+  final String? content;
+  const NoticeWrite({
+    super.key,
+    this.title = null,
+    this.content = null,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: NoticeAppBar(title: '공지사항 (Admin)',),
-        body: NoticeWriteBodyWidget(),
+        appBar: AppBar(
+          title:  Text('공지사항 (Admin)',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'BM_HANNA_TTF',
+              )),
+          centerTitle : true,
+          automaticallyImplyLeading: false,
+          backgroundColor: Color(0xEF537052),
+          elevation: 4,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        body: NoticeWriteBodyWidget(title: title, content: content, context: context,),
       ),
     );
   }
 }
 
 class NoticeWriteBodyWidget extends StatelessWidget {
-  const NoticeWriteBodyWidget({super.key});
+  final BuildContext context;
+  final String? title;
+  final String? content;
+  const NoticeWriteBodyWidget({
+    super.key,
+    this.title = null,
+    this.content = null,
+    required this.context,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +59,23 @@ class NoticeWriteBodyWidget extends StatelessWidget {
       width: double.infinity,
       child: ListView(
         children: [
-          TitleInputBox(),
-          ContentInputBox(),
+          TitleInputBox(innerValue: title,),
+          ContentInputBox(innerValue: content,),
           RowDate(property: 'createdAt', value: '20240823'),
           RowDate(property: 'updatedAt', value: '20240823'),
-          TextBtnWidthInfinity(text: '저장', onPressed: (){}, theme: true,),
-          TextBtnWidthInfinity(text: '취소', onPressed: (){}, ),
+          TextBtnWidthInfinity(text: '저장', onPressed: (){
+            // ********** 저장 로직 ************
+            // 각 text field의 값을 빼올 수 있도록 controller 파라미터도 만들었습니다
+            // ******************************
+            // TODO
+
+          }, theme: true,),
+          TextBtnWidthInfinity(
+            text: '취소',
+            onPressed: (){
+              Navigator.pop(this.context);
+            },
+          ),
         ],
       ),
     );
@@ -43,14 +83,34 @@ class NoticeWriteBodyWidget extends StatelessWidget {
 }
 
 class TitleInputBox extends StatefulWidget {
-  const TitleInputBox({super.key});
+  final String? innerValue;
+  final TextEditingController? controller;
+  const TitleInputBox({
+    super.key,
+    this.innerValue,
+    this.controller,
+  });
+
+
 
   @override
   State<TitleInputBox> createState() => _TitleInputBoxState();
 }
 
 class _TitleInputBoxState extends State<TitleInputBox> {
-  final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.controller ?? TextEditingController(text: widget.innerValue ?? '');
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +146,32 @@ class _TitleInputBoxState extends State<TitleInputBox> {
 }
 
 class ContentInputBox extends StatefulWidget {
-  const ContentInputBox({super.key});
+  final String? innerValue;
+  final TextEditingController? controller;
+  const ContentInputBox({
+    super.key,
+    this.innerValue,
+    this.controller,
+  });
 
   @override
   State<ContentInputBox> createState() => _ContentInputBoxState();
 }
 
 class _ContentInputBoxState extends State<ContentInputBox> {
-  final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.controller ?? TextEditingController(text: widget.innerValue ?? '');
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -195,6 +273,9 @@ class TextBtnWidthInfinity extends StatelessWidget {
             color: theme ? Colors.white : const Color(0xFF537052),
             fontSize: 17,
           ),
+        ),
+        style: TextButton.styleFrom(
+          overlayColor: Colors.black.withOpacity(0.3),
         ),
       ),
     );

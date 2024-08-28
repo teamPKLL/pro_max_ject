@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pro_max_ject/screen/notification//notice.dart';
+import 'package:pro_max_ject/screen/notification/notice.dart';
+import 'package:pro_max_ject/screen/notification/notice_write.dart';
 import 'package:pro_max_ject/screen/widget/BaseNoticeBox.dart';
 
 void main() async {
@@ -32,18 +33,30 @@ class NoticeAdminBodyWidget extends StatelessWidget {
       color: const Color(0xFFF0F1F0),
       child: Column(
         children: [
-          AddNoticeBtn(),
+          AddNoticeBtn(context: context),
           Expanded(
             child: ListView(
-              children: const [
+              children: [
                 AdminNoticeBox(
+                  context: context,
                   title: '테스트1',
                   content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용',
-                  theme: Color(0xFF537052),
                 ),
-                AdminNoticeBox(title: '테스트2', content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'),
-                AdminNoticeBox(title: '테스트3', content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'),
-                AdminNoticeBox(title: '테스트4', content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'),
+                AdminNoticeBox(
+                  context: context,
+                  title: '테스트2',
+                  content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
+                ),
+                AdminNoticeBox(
+                  context: context,
+                  title: '테스트3',
+                  content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
+                ),
+                AdminNoticeBox(
+                  context: context,
+                  title: '테스트4',
+                  content: '내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용'
+                ),
               ],
             ),
           ),
@@ -54,7 +67,11 @@ class NoticeAdminBodyWidget extends StatelessWidget {
 }
 
 class AddNoticeBtn extends StatelessWidget {
-  const AddNoticeBtn({super.key});
+  final BuildContext context;
+  const AddNoticeBtn({
+    super.key,
+    required this.context,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +85,14 @@ class AddNoticeBtn extends StatelessWidget {
         ),
       ),
       child: IconButton(
-        onPressed: (){}, // ************* CREATE logic
+        onPressed: (){
+          Navigator.push(
+            this.context,
+              MaterialPageRoute(
+                builder: (context) => NoticeWrite(),
+              )
+          );
+        }, // ************* CREATE logic
         icon: const Icon(Icons.add),
         color: Color(0xFF537052),
       ),
@@ -77,11 +101,13 @@ class AddNoticeBtn extends StatelessWidget {
 }
 
 class AdminNoticeBox extends BaseNoticeBox {
+  final BuildContext context;
   const AdminNoticeBox({
     Key? key,
     required String title,
     required String content,
     Color theme = Colors.white,
+    required this.context,
   }) : super(key: key, title: title, content: content, theme: theme);
 
   @override
@@ -94,7 +120,17 @@ class AdminNoticeBox extends BaseNoticeBox {
           children: [
             Expanded(
               child: IconButton(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NoticeWrite(
+                        title: title,
+                        content: content,
+                      ),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.edit_note,
                   color: Colors.blue,
                 ),
