@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pro_max_ject/models/disaster_news.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DisasterNewsService {
   final String _newsUrl = 'https://www.safetydata.go.kr/V2/api/DSSP-IF-00051';
-  final String _newsServiceKey = 'MWZ4TX61TQ3YY7MS'; // 서비스 키
+  final String _newsServiceKey = dotenv.env['NEWS_SERVICE_KEY']!; // 서비스 키
 
   Future<List<DisasterNews>> fetchDisasterNews() async {
     try {

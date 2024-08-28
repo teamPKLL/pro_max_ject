@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/disaster_message.dart'; // 모델 파일 경로를 올바르게 지정
 import 'package:intl/intl.dart'; // 날짜 포맷팅 패키지
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DisasterService {
-  final String serviceKey = '7X71315499M37R37'; // 서비스키
+  final String serviceKey = dotenv.env['DISASTER_SERVICE_KEY']!; // 서비스키
 
   Future<List<DisasterMessage>> fetchDisasterMessagesFromApi(
       String regionName, {

@@ -4,13 +4,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:pro_max_ject/models/shelter_map.dart';
 import 'package:location/location.dart';
 import 'package:pro_max_ject/services/location_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ShelterService {
-  final String _civilDefenseUrl = 'https://www.safetydata.go.kr/V2/api/DSSP-IF-10166';
-  final String _civilDefenseServiceKey = 'Z1871E2443W8H1PN';
+  final String _civilDefenseUrl = dotenv.env['CIVIL_DEFENSE_API_URL']!;
+  final String _civilDefenseServiceKey = dotenv.env['CIVIL_DEFENSE_SERVICE_KEY']!;
 
-  final String _disasterUrl = 'https://www.safetydata.go.kr/V2/api/DSSP-IF-10941';
-  final String _disasterServiceKey = '04YN24A74RIOZ5L2';
+  final String _disasterUrl = dotenv.env['DISASTER_API_URL']!;
+  final String _disasterServiceKey = dotenv.env['DISASTER_SERVICE_KEY']!;
 
   final LocationService _locationService = LocationService();
 
