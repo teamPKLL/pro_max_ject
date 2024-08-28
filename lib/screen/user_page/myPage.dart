@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pro_max_ject/screen/user_page/contactUs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/user_service.dart'; // UserService import 추가
 import '../../services/profile_service.dart'; // ProfileService import 추가
@@ -26,6 +27,19 @@ class MyPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFF0F1F0),
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(
+          '마이페이지',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'BM_HANNA_TTF',
+          ),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xEF537052),
+        elevation: 4,
+      ),
       body: SingleChildScrollView(
         child: FutureBuilder<String?>(
           future: _getUserId(),
@@ -60,7 +74,7 @@ class MyPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(0, 30, 0, 5),
+                            padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                             width: double.infinity,
                             color: Color(0xFFF0F1F0),
                             child: Column(
@@ -78,8 +92,8 @@ class MyPage extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Text(profile.email),
-                                      Text(' | '),
-                                      Text(profile.user_id),
+                                      // Text(' | '),
+                                      // Text(profile.user_id),
                                     ],
                                   ),
                                 ),
@@ -88,9 +102,15 @@ class MyPage extends StatelessWidget {
                           ),
                           ContentBox(
                             children: [
+                              ContentIconRow(icon: Icon(Icons.account_circle), text: profile.name),
+                              ContentIconRow(icon: Icon(Icons.cake_outlined), text: profile.birth),
+                            ],
+                          ),
+                          ContentBox(
+                            children: [
                               ContentIconRow(
-                                icon: Icon(Icons.account_circle),
-                                text: "Edit Profile Information",
+                                icon: Icon(Icons.edit_note),
+                                text: "프로필 정보 수정",
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -99,42 +119,22 @@ class MyPage extends StatelessWidget {
                                 },
                               ),
                               ContentIconRow(
-                                icon: Icon(Icons.notifications_none),
-                                text: "Notifications",
-                                description: "ON",
-                              ),
-                              ContentIconRow(
-                                icon: Icon(Icons.language),
-                                text: "Language",
-                                description: "English",
-                              ),
-                            ],
-                          ),
-                          ContentBox(
-                            children: [
-                              ContentIconRow(
-                                icon: Icon(Icons.info_outline),
-                                text: "Help & Support",
-                              ),
-                              ContentIconRow(
-                                icon: Icon(Icons.help_outline),
-                                text: "FAQ",
-                              ),
-                              ContentIconRow(
                                 icon: Icon(Icons.textsms_outlined),
-                                text: "Contact us",
-                              ),
-                              ContentIconRow(
-                                icon: Icon(Icons.security),
-                                text: "Privacy & Policy",
+                                text: "개발자 연락처",
+                                onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => ContactUsPage()),
+                                  );
+                                },
                               ),
                             ],
                           ),
                           ContentBox(
                             children: [
                               ContentIconRow(
-                                icon: Icon(Icons.logout_outlined),
-                                text: "Log Out",
+                                icon: Icon(Icons.logout_outlined, color: Colors.red,),
+                                text: "로그 아웃",
                                 onTap: () async {
                                   await _userService.logoutUser();
                                   Navigator.pushReplacementNamed(context, '/login');
