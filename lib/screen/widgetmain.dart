@@ -143,9 +143,9 @@ class _MainState extends State<Main> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildGridItem(
+                _buildGridItem2(
                   context: context,
-                  imagePath: 'assets/idea.png',
+                  imagePath: 'assets/sangsik.png',
                   width: width,
                   onTap: () {
                     context.read<IndexProvider>().setIndex(1);
@@ -155,9 +155,9 @@ class _MainState extends State<Main> {
                     );
                   },
                 ),
-                _buildGridItem(
+                _buildGridItem2(
                   context: context,
-                  imagePath: 'assets/letter.png',
+                  imagePath: 'assets/news.png',
                   width: width,
                   onTap: () {
                     context.read<IndexProvider>().setIndex(1);
@@ -172,12 +172,11 @@ class _MainState extends State<Main> {
             ),
             SizedBox(height: height * 0.03),
 
-            // 지도 위치와 SOS 위치
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildMapItem(context, width),
-                _buildGridItem(
+                _buildGridItem1(
                   context: context,
                   imagePath: 'assets/sos_button.png',
                   width: width,
@@ -206,7 +205,50 @@ class _MainState extends State<Main> {
     );
   }
 
-  Widget _buildGridItem({
+  Widget _buildGridItem1({
+    required BuildContext context,
+    required String imagePath,
+    required double width,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: width * 0.4, // 외부 컨테이너 크기 조절
+        height: width * 0.4, // 외부 컨테이너 크기 조절
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0.00, -1.00),
+            end: Alignment(0, 1),
+            colors: [Color(0xFFFDD8C3), Color(0xFFFF8873)], // 그라데이션 색상
+          ),
+          borderRadius: BorderRadius.circular(45),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x3F000000),
+              blurRadius: 4,
+              offset: Offset(0, 4),
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(10.0), // Padding 값을 조정해 크기 조절
+            child: Image.asset(
+              imagePath,
+              // fit: BoxFit.contain, // 이미지를 컨테이너에 맞추어 조절
+              alignment: Alignment.center,
+              width: width * 0.8, // 이미지의 너비를 직접 조정하여 크기 설정
+              height: width * 0.8, // 이미지의 높이를 직접 조정하여 크기 설정
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGridItem2({
     required BuildContext context,
     required String imagePath,
     required double width,
@@ -221,7 +263,7 @@ class _MainState extends State<Main> {
           gradient: LinearGradient(
             begin: Alignment(0.00, -1.00),
             end: Alignment(0, 1),
-            colors: [Color(0xFFFDD8C3), Color(0xFFFF8873)], // 그라데이션 색상 추가
+            colors: [Color(0xFFFFF8D3), Color(0xFFDAEAE9), Color(0xFFB5DCFF)], // 그라데이션 색상 추가
           ),
           borderRadius: BorderRadius.circular(45),
           boxShadow: [
@@ -236,7 +278,7 @@ class _MainState extends State<Main> {
         child: Padding(
           padding: EdgeInsets.all(15.0),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(45),
+            borderRadius: BorderRadius.circular(0),
             child: Image.asset(
               imagePath,
               fit: BoxFit.cover,
