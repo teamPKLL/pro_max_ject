@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> screens = [
     MapPage(),         // 지도 페이지
     FigmaToCodeApp(),  // main 페이지
-    Reminder(),        // 검색 페이지 들어가야 함.
+    Reminder(),        // 알림 페이지
     MyPage(),          // 프로필 페이지
   ];
 

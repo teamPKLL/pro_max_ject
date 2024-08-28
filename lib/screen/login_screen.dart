@@ -221,13 +221,10 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 24),
             TextButton(  // 비밀번호 찾기 버튼
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => ForGot()),
-                // );
+                Navigator.pushNamed(context, '/forgot');
               },
               child: Text(
-                'Forgot Password?',
+                'Forgot?',
                 style: TextStyle(
                   fontSize: 16,
                   decoration: TextDecoration.underline,

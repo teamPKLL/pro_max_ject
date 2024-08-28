@@ -115,6 +115,8 @@ class NewsDetailPage extends StatelessWidget {
         title: Text(news.ynaTitle),
         backgroundColor: Color(0xFF537052), // 연녹색으로 변경
       ),
+      backgroundColor: Color(0xFFF0F1F0),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(

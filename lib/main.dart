@@ -14,7 +14,7 @@ import 'package:pro_max_ject/screen/widget/IndexProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
-
+import 'package:pro_max_ject/screen/forgot.dart';
 
 Future<void> main() async {
   // Flutter 엔진을 초기화
@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUp(),
         '/main': (context) => MainScreen(),
+        '/forgot' : (context) => ForGot(),
       },
     );
   }
