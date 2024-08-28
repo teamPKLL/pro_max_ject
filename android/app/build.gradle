@@ -40,7 +40,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.project.pro_max_ject"
+    namespace = "com.android.application"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

@@ -23,9 +23,9 @@ class _SignUpState extends State<SignUp> {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
-    final String p_num = _phoneController.text;
+    final String phoneNumber = _phoneController.text;
 
-    String? result = await _userService.validateAndRegisterUser(username, password, confirmPassword, p_num);
+    String? result = await _userService.validateAndRegisterUser(username, password, confirmPassword, phoneNumber);
     if (result != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result)),
@@ -52,7 +52,7 @@ class _SignUpState extends State<SignUp> {
 
     String? result = await _userService.verifyPhoneNumber(
       phoneNumber: formattedPhoneNumber,
-      onCodeSent: (String verificationId) {
+      onCodeSent: (String verificationId, int? resendToken) {
         setState(() {
           _verificationId = verificationId;
         });
@@ -61,10 +61,16 @@ class _SignUpState extends State<SignUp> {
         );
       },
       onVerificationCompleted: (PhoneAuthCredential credential) async {
-        await _userService.signInWithSmsCode(credential.smsCode!);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('전화번호 인증이 자동으로 완료되었습니다.')),
-        );
+        String? result = await _userService.signInWithSmsCode(_verificationId, credential.smsCode!);
+        if (result != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(result)),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('전화번호 인증이 자동으로 완료되었습니다.')),
+          );
+        }
       },
       onVerificationFailed: (FirebaseAuthException e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -82,7 +88,7 @@ class _SignUpState extends State<SignUp> {
 
   void _signInWithSmsCode() async {
     final String smsCode = _smsCodeController.text;
-    String? result = await _userService.signInWithSmsCode(smsCode);
+    String? result = await _userService.signInWithSmsCode(_verificationId, smsCode);
 
     if (result != null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -149,7 +155,7 @@ class _SignUpState extends State<SignUp> {
               _buildTextField(controller: _smsCodeController, label: 'SMS 코드', icon: Icons.sms),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: _registerAccount,
+                onPressed: _signInWithSmsCode,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF537052),
                 ),
