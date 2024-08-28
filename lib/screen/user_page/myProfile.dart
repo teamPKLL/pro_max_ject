@@ -216,7 +216,7 @@ class TextBtn extends StatelessWidget {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: theme ? const Color(0xFF537052) : const Color(0xFFF0F1F0),
         border: Border.all(
