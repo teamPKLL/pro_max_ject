@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
+import 'package:pro_max_ject/screen/widget/NoticeDisplayWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../api/disaster_provider.dart';
@@ -109,33 +110,13 @@ class _MainState extends State<Main> {
         child: Column(
           children: [
             SizedBox(height: height * 0.02),
-            // 1번째 공지부분
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Notice()),
-                );
-              },
-              child: Container(
-                width: width * 0.9,
-                height: height * 0.05,
-                margin: EdgeInsets.symmetric(horizontal: width * 0.04),
-                decoration: ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  shadows: [
-                    BoxShadow(
-                      color: Color(0x3F000000),
-                      blurRadius: 4,
-                      offset: Offset(0, 4),
-                      spreadRadius: 0,
-                    )
-                  ],
-                ),
-              ),
+            NoticeDisplayWidget(
+                strings: ['공지사항 : 업데이트 알림!', '오늘의 공지사항...', '룰루랄라라랄라'],
+                // TODO : 리스트는 공지사항 DB에서 title 몇개만 가져오는걸로..?
+                displayDuration: const Duration(seconds: 4),
+                context: context,
+                width: width,
+                height: height
             ),
             SizedBox(height: height * 0.03),
 
