@@ -10,8 +10,8 @@ class ShelterService {
   final String _civilDefenseUrl = dotenv.env['CIVIL_DEFENSE_API_URL']!;
   final String _civilDefenseServiceKey = dotenv.env['CIVIL_DEFENSE_SERVICE_KEY']!;
 
-  final String _disasterUrl = dotenv.env['DISASTER_API_URL']!;
-  final String _disasterServiceKey = dotenv.env['DISASTER_SERVICE_KEY']!;
+  final String _disasterUrl = 'https://www.safetydata.go.kr/V2/api/DSSP-IF-10941';
+  final String _disasterServiceKey = '04YN24A74RIOZ5L2';
 
   final LocationService _locationService = LocationService();
 
