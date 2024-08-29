@@ -46,4 +46,3 @@ app.*.map.json
 
 # api key
 .env
-android/gradle.properties
