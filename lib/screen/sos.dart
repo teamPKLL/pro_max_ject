@@ -12,7 +12,7 @@ void main() {
 }
 
 _sendingMails() async {
-  var url = Uri.parse("tel:01056766769");
+  var url = Uri.parse("tel:119");
   if (await canLaunchUrl(url)) {
     await launchUrl(url);
   } else {
@@ -23,7 +23,7 @@ _sendingMails() async {
 // SMS 보내기 함수
 _sendingSMS(double lat, double lng, String address) async {
   var url = Uri.parse(
-      "sms:01056766769?body=긴급 상황입니다. \n\n제 현재 위치는 \n위도: $lat, \n경도: $lng 입니다. \n주소: $address");
+      "sms:119?body=긴급 상황입니다. \n\n제 현재 위치는 \n위도: $lat, \n경도: $lng 입니다. \n주소: $address");
   if (await canLaunchUrl(url)) {
     await launchUrl(url);
   } else {

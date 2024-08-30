@@ -6,6 +6,7 @@ class ContactUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,  // 디버그 표시 제거
       home: Scaffold(
         backgroundColor: Color(0xFFF0F1F0),
         appBar: AppBar(
@@ -50,20 +51,20 @@ class ContactUsBodyWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Text("이현준 : 202244111@itc.ac.kr", style: myTextStyle,)
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text("이현준 : 202244111@itc.ac.kr", style: myTextStyle,)
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Text("박민제 : alswp202044059@gamil.com", style: myTextStyle,)
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text("박민제 : alswp202044059@gamil.com", style: myTextStyle,)
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Text("김나희 : 202344055@itc.ac.kr", style: myTextStyle,)
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text("김나희 : 202344055@itc.ac.kr", style: myTextStyle,)
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Text("이정준 : jungjune276@gmail.com", style: myTextStyle,)
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text("이정준 : jungjune276@gmail.com", style: myTextStyle,)
           ),
         ],
       ),
