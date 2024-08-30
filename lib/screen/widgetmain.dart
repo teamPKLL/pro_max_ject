@@ -9,7 +9,7 @@ import '../api/disaster_provider.dart';
 import 'common_sense.dart';
 import 'disaster_news.dart';
 import 'map.dart';
-import 'notification/notice.dart';
+import 'notification/notice_user.dart';
 import 'reminder.dart';
 import 'sos.dart';
 import 'widget/IndexProvider.dart';

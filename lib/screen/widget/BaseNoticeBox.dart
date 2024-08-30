@@ -36,9 +36,11 @@ class _BaseNoticeBoxState extends State<BaseNoticeBox> {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = widget.theme == Colors.white;
+    final content = _isOpen ? widget.content : _truncateContent(widget.content);
+
     return Container(
       width: MediaQuery.of(context).size.width - 40, // 화면 너비에서 padding을 제외한 너비
-      // padding: EdgeInsets.only(bottom: 10) ,
       margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
       decoration: ShapeDecoration(
         color: widget.theme,
@@ -68,7 +70,7 @@ class _BaseNoticeBoxState extends State<BaseNoticeBox> {
                   child: Text(
                     widget.title,
                     style: TextStyle(
-                      color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
+                      color: isLightTheme ? Colors.black : Colors.white,
                       fontSize: 20,
                     ),
                   ),
@@ -82,7 +84,7 @@ class _BaseNoticeBoxState extends State<BaseNoticeBox> {
                       curve: Curves.easeInOut,
                       child: Icon(Icons.arrow_back_ios_new, size: 15),
                     ),
-                    color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
+                    color: isLightTheme ? Colors.black : Colors.white,
                     onPressed: () {
                       _toggleOpen();
                       _iconRotate();
@@ -95,18 +97,17 @@ class _BaseNoticeBoxState extends State<BaseNoticeBox> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Divider(
-              color: (widget.theme == Colors.white) ? Color(0xFFD4D4D4) : Color(0xFF8BA38A),
+              color: isLightTheme ? Color(0xFFD4D4D4) : Color(0xFF8BA38A),
               thickness: 2,
               height: 20,
-
             ),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
             child: Text(
-              _isOpen ? widget.content : widget.content.substring(0, 20) + '...',
+              content,
               style: TextStyle(
-                color: (widget.theme == Colors.white) ? Colors.black : Colors.white,
+                color: isLightTheme ? Colors.black : Colors.white,
               ),
             ),
           ),
@@ -114,5 +115,11 @@ class _BaseNoticeBoxState extends State<BaseNoticeBox> {
         ],
       ),
     );
+  }
+
+  // content 문자열을 안전하게 자르는 메서드
+  String _truncateContent(String content) {
+    const int maxLength = 20;
+    return content.length <= maxLength ? content : content.substring(0, maxLength) + '...';
   }
 }
