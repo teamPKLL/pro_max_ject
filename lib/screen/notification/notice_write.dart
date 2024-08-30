@@ -1,56 +1,87 @@
 import 'package:flutter/material.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const NoticeWrite());
-}
+import 'package:pro_max_ject/services/notice_service.dart';
+import 'package:pro_max_ject/models/notice.dart';
 
 class NoticeWrite extends StatelessWidget {
   final String? title;
   final String? content;
+  final String? id;
+
   const NoticeWrite({
     super.key,
-    this.title = null,
-    this.content = null,
+    this.title,
+    this.content,
+    this.id,
   });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title:  Text('공지사항 (Admin)',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'BM_HANNA_TTF',
-              )),
-          centerTitle : true,
-          automaticallyImplyLeading: false,
-          backgroundColor: Color(0xEF537052),
-          elevation: 4,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          id == null ? '공지사항 추가' : '공지사항 수정',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'BM_HANNA_TTF',
           ),
         ),
-        body: NoticeWriteBodyWidget(title: title, content: content, context: context,),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xEF537052),
+        elevation: 4,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: NoticeWriteBodyWidget(
+        title: title,
+        content: content,
+        id: id,
+        context: context,
       ),
     );
   }
 }
 
-class NoticeWriteBodyWidget extends StatelessWidget {
+class NoticeWriteBodyWidget extends StatefulWidget {
   final BuildContext context;
   final String? title;
   final String? content;
+  final String? id;
+
   const NoticeWriteBodyWidget({
     super.key,
-    this.title = null,
-    this.content = null,
+    this.title,
+    this.content,
+    this.id,
     required this.context,
   });
+
+  @override
+  _NoticeWriteBodyWidgetState createState() => _NoticeWriteBodyWidgetState();
+}
+
+class _NoticeWriteBodyWidgetState extends State<NoticeWriteBodyWidget> {
+  late TextEditingController _titleController;
+  late TextEditingController _contentController;
+  final NoticeService _service = NoticeService();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.title ?? '');
+    _contentController = TextEditingController(text: widget.content ?? '');
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,21 +90,38 @@ class NoticeWriteBodyWidget extends StatelessWidget {
       width: double.infinity,
       child: ListView(
         children: [
-          TitleInputBox(innerValue: title,),
-          ContentInputBox(innerValue: content,),
-          RowDate(property: 'createdAt', value: '20240823'),
-          RowDate(property: 'updatedAt', value: '20240823'),
-          TextBtnWidthInfinity(text: '저장', onPressed: (){
-            // ********** 저장 로직 ************
-            // 각 text field의 값을 빼올 수 있도록 controller 파라미터도 만들었습니다
-            // ******************************
-            // TODO
+          TitleInputBox(controller: _titleController),
+          ContentInputBox(controller: _contentController),
+          RowDate(property: 'Created At', value: '2024-08-23'),
+          RowDate(property: 'Updated At', value: '2024-08-23'),
+          TextBtnWidthInfinity(
+            text: '저장',
+            onPressed: () async {
+              final title = _titleController.text;
+              final content = _contentController.text;
 
-          }, theme: true,),
+              try {
+                if (widget.id == null) {
+                  // 새 공지사항 추가
+                  await _service.createNotice(title, content);
+                } else {
+                  // 기존 공지사항 수정
+                  await _service.updateNotice(widget.id!, title, content);
+                }
+
+                // 저장 성공 후 노티스 어드민 페이지로 돌아가기
+                Navigator.pop(context); // 노티스 어드민 페이지로 돌아가기
+              } catch (e) {
+                // 오류 처리
+                print('Failed to add/update notice: $e');
+              }
+            },
+            theme: true,
+          ),
           TextBtnWidthInfinity(
             text: '취소',
-            onPressed: (){
-              Navigator.pop(this.context);
+            onPressed: () {
+              Navigator.pop(context); // 현재 페이지 닫기
             },
           ),
         ],
@@ -82,35 +130,12 @@ class NoticeWriteBodyWidget extends StatelessWidget {
   }
 }
 
-class TitleInputBox extends StatefulWidget {
-  final String? innerValue;
-  final TextEditingController? controller;
+class TitleInputBox extends StatelessWidget {
+  final TextEditingController controller;
   const TitleInputBox({
     super.key,
-    this.innerValue,
-    this.controller,
+    required this.controller,
   });
-
-
-
-  @override
-  State<TitleInputBox> createState() => _TitleInputBoxState();
-}
-
-class _TitleInputBoxState extends State<TitleInputBox> {
-  late TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.innerValue ?? '');
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,85 +143,63 @@ class _TitleInputBoxState extends State<TitleInputBox> {
       padding: EdgeInsets.zero,
       margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
       child: TextField(
-        controller: _controller,
+        controller: controller,
         cursorColor: const Color(0xFF537052),
         decoration: InputDecoration(
-          labelText: 'title',
+          labelText: '제목',
           labelStyle: const TextStyle(
-            color: Colors.grey, // 기본 상태의 labelText 색상
+            color: Colors.grey,
           ),
           floatingLabelStyle: const TextStyle(
-            color: const Color(0xFF537052), // 활성화(포커스) 상태에서의 labelText 색상
+            color: Color(0xFF537052),
           ),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20),
           ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                color: Color(0xFF537052), // 포커스될 때의 테두리 색상
-                width: 2.0,
-              ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: Color(0xFF537052),
+              width: 2.0,
             ),
+          ),
         ),
-
-      )
+      ),
     );
   }
 }
 
-class ContentInputBox extends StatefulWidget {
-  final String? innerValue;
-  final TextEditingController? controller;
+class ContentInputBox extends StatelessWidget {
+  final TextEditingController controller;
   const ContentInputBox({
     super.key,
-    this.innerValue,
-    this.controller,
+    required this.controller,
   });
-
-  @override
-  State<ContentInputBox> createState() => _ContentInputBoxState();
-}
-
-class _ContentInputBoxState extends State<ContentInputBox> {
-  late TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.innerValue ?? '');
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.zero,
-        margin: EdgeInsets.fromLTRB(30, 10, 30, 30),
-        child: TextField(
-          cursorColor: const Color(0xFF537052),
-          controller: _controller,
-          keyboardType: TextInputType.multiline,
-          maxLines: 10,
-          decoration: InputDecoration(
-            hintText: 'Content',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                color: Color(0xFF537052), // 포커스될 때의 테두리 색상
-                width: 2.0,
-              ),
+      padding: EdgeInsets.zero,
+      margin: EdgeInsets.fromLTRB(30, 10, 30, 30),
+      child: TextField(
+        controller: controller,
+        cursorColor: const Color(0xFF537052),
+        keyboardType: TextInputType.multiline,
+        maxLines: 10,
+        decoration: InputDecoration(
+          hintText: '내용',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: Color(0xFF537052),
+              width: 2.0,
             ),
           ),
-        )
+        ),
+      ),
     );
   }
 }
@@ -205,11 +208,12 @@ class RowDate extends StatelessWidget {
   final String property;
   final String value;
   final double fontSize;
+
   const RowDate({
     super.key,
     required this.property,
     required this.value,
-    this.fontSize = 20.0
+    this.fontSize = 20.0,
   });
 
   @override
@@ -217,22 +221,24 @@ class RowDate extends StatelessWidget {
     return Container(
       margin: EdgeInsets.fromLTRB(40, 0, 40, 10),
       width: double.infinity,
-
       child: Row(
         children: [
-          Text(property,
+          Text(
+            property,
             style: TextStyle(
-              fontSize: this.fontSize,
+              fontSize: fontSize,
             ),
           ),
-          Text(' : ',
+          Text(
+            ' : ',
             style: TextStyle(
-              fontSize: this.fontSize,
+              fontSize: fontSize,
             ),
           ),
-          Text(value,
+          Text(
+            value,
             style: TextStyle(
-              fontSize: this.fontSize,
+              fontSize: fontSize,
             ),
           ),
         ],
@@ -245,6 +251,7 @@ class TextBtnWidthInfinity extends StatelessWidget {
   final String text;
   final bool theme;
   final VoidCallback onPressed;
+
   const TextBtnWidthInfinity({
     super.key,
     required this.text,
@@ -259,7 +266,7 @@ class TextBtnWidthInfinity extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: (theme) ? const Color(0xFF537052) : const Color(0xFFF0F1F0),
+        color: theme ? const Color(0xFF537052) : const Color(0xFFF0F1F0),
         border: Border.all(
           color: const Color(0xFF537052),
           width: 2.0,
@@ -268,7 +275,8 @@ class TextBtnWidthInfinity extends StatelessWidget {
       ),
       child: TextButton(
         onPressed: onPressed,
-        child: Text(text,
+        child: Text(
+          text,
           style: TextStyle(
             color: theme ? Colors.white : const Color(0xFF537052),
             fontSize: 17,
@@ -281,4 +289,3 @@ class TextBtnWidthInfinity extends StatelessWidget {
     );
   }
 }
-

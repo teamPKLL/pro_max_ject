@@ -1,7 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:pro_max_ject/screen/notification/notice.dart';
+import 'package:pro_max_ject/screen/notification/notice_user.dart';
+import 'package:pro_max_ject/screen/notification/notice_admin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// 사용자 정보를 가져오는 함수
+Future<bool> getIsAdminStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('isAdmin') ?? false; // isAdmin이 null일 경우 기본값은 false
+}
 
 class NoticeDisplayWidget extends StatefulWidget {
   final List<String> strings;
@@ -18,7 +25,7 @@ class NoticeDisplayWidget extends StatefulWidget {
     this.fadeDuration = const Duration(milliseconds: 500),
     required this.context,
     required this.width,
-    required this.height
+    required this.height,
   });
 
   @override
@@ -28,7 +35,6 @@ class NoticeDisplayWidget extends StatefulWidget {
 class _NoticeDisplayWidgetState extends State<NoticeDisplayWidget> {
   int currentIndex = 0;
   Timer? timer;
-  bool showText = true;
   double opacity = 1.0;
 
   @override
@@ -46,11 +52,19 @@ class _NoticeDisplayWidgetState extends State<NoticeDisplayWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Notice()),
-        );
+      onTap: () async {
+        bool isAdmin = await getIsAdminStatus(); // isAdmin 상태 확인
+        if (isAdmin) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NoticeAdmin()),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NoticeUserPage()),
+          );
+        }
       },
       child: Container(
         child: AnimatedOpacity(
