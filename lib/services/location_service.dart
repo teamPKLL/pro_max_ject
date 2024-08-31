@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart'; // 위치 관련 패키지
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LocationService {
-  final String _kakaoApiKey = 'b3ad05ebb978ee3d4bc9ee6a18518b2e'; // 카카오 API 키
+  final String _kakaoApiKey = dotenv.env['KAKAO_API_KEY_LOCATION']!; // 카카오 API 키
 
   // 현재 위치를 가져오는 메소드
   Future<LocationData?> getCurrentLocation() async {

@@ -27,8 +27,8 @@ Future<void> main() async {
 
   // Kakao SDK 초기화
   KakaoSdk.init(
-    nativeAppKey: 'c16c44bd57bcaf0c1b866cb6bd1ce937',
-    javaScriptAppKey: '8bc1ee40ec3a8a422d71fb1956f0ebf7',
+    nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'],
+    javaScriptAppKey: dotenv.env['KAKAO_JS_APP_KEY'],
   );
 
   // Firebase 초기화

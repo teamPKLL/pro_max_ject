@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/release
 /config.dart
 /config.properties
+
+# api key
+.env
