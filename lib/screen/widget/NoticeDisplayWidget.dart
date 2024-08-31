@@ -40,7 +40,10 @@ class _NoticeDisplayWidgetState extends State<NoticeDisplayWidget> {
   @override
   void initState() {
     super.initState();
-    startTimer();
+    if (widget.strings.isNotEmpty) {
+      // 리스트가 비어있지 않을 때만 타이머 시작
+      startTimer();
+    }
   }
 
   @override
@@ -70,12 +73,21 @@ class _NoticeDisplayWidgetState extends State<NoticeDisplayWidget> {
         child: AnimatedOpacity(
           opacity: opacity,
           duration: widget.fadeDuration,
-          child: Text(
+          child: widget.strings.isNotEmpty
+              ? Text(
             widget.strings[currentIndex],
             key: ValueKey<String>(widget.strings[currentIndex]),
             style: TextStyle(
               fontFamily: 'BM_HANNA_TTF',
               fontSize: 15,
+            ),
+          )
+              : Text(
+            '공지사항이 없습니다.', // 리스트가 비어 있을 때 표시할 기본 메시지
+            style: TextStyle(
+              fontFamily: 'BM_HANNA_TTF',
+              fontSize: 15,
+              color: Colors.grey,
             ),
           ),
         ),
