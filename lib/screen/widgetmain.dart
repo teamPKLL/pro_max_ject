@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:location/location.dart';
 import 'package:pro_max_ject/screen/widget/NoticeDisplayWidget.dart';
+import 'package:pro_max_ject/services/notice_service.dart';
 import 'package:provider/provider.dart';
 
 import '../api/disaster_provider.dart';
@@ -42,11 +43,25 @@ class _MainState extends State<Main> {
   Location location = Location();
   Set<Marker> markers = {};
   late KakaoMapController mapController;
+  final NoticeService _noticeService = NoticeService();
+  List<String> noticeTitles = [];
 
   @override
   void initState() {
     super.initState();
     _locateMe();
+    _fetchNoticeTitles();
+  }
+
+  Future<void> _fetchNoticeTitles() async {
+    try {
+      List<String> titles = await _noticeService.getRecentNoticeTitles(3); // Fetch the latest 3 titles
+      setState(() {
+        noticeTitles = titles;
+      });
+    } catch (e) {
+      print('Failed to fetch notice titles: $e');
+    }
   }
 
   Future<void> _locateMe() async {
@@ -111,7 +126,7 @@ class _MainState extends State<Main> {
           children: [
             SizedBox(height: height * 0.02),
             NoticeDisplayWidget(
-                strings: ['공지사항 : 업데이트 알림!', '오늘의 공지사항...', '룰루랄라라랄라'],
+                strings: noticeTitles,
                 // TODO : 리스트는 공지사항 DB에서 title 몇개만 가져오는걸로..?
                 displayDuration: const Duration(seconds: 4),
                 context: context,
