@@ -6,20 +6,41 @@ import '../../services/profile_service.dart'; // ProfileService import 추가
 import '../../models/user_profile.dart'; // Profile import 추가
 import 'myProfile.dart'; // 경로를 적절히 수정하세요
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
+  @override
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
   final UserService _userService = UserService(); // UserService 인스턴스 생성
   final ProfileService _profileService = ProfileService(); // ProfileService 인스턴스 생성
 
-  MyPage({super.key}); // const 제거
+  late Future<String?> _userIdFuture;
+  late Future<Profile?> _profileFuture;
 
-  Future<String?> _getUserName() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('username');
+  @override
+  void initState() {
+    super.initState();
+    _userIdFuture = _getUserId();
   }
 
   Future<String?> _getUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('userId');
+  }
+
+  Future<void> _updateProfileFuture() async {
+    String? userId = await _getUserId();
+    if (userId != null) {
+      setState(() {
+        _profileFuture = _profileService.getProfileByUserId(userId);
+      });
+    }
+  }
+
+  Future<String?> _getUserPNum() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('phoneNumber');
   }
 
   @override
@@ -42,7 +63,7 @@ class MyPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<String?>(
-          future: _getUserId(),
+          future: _userIdFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -52,8 +73,10 @@ class MyPage extends StatelessWidget {
               return Center(child: Text('No user data found'));
             } else {
               String userId = snapshot.data!;
+              _profileFuture = _profileService.getProfileByUserId(userId); // 프로필 Future 초기화
+
               return FutureBuilder<Profile?>(
-                future: _profileService.getProfileByUserId(userId),
+                future: _profileFuture,
                 builder: (context, profileSnapshot) {
                   if (profileSnapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
@@ -79,23 +102,30 @@ class MyPage extends StatelessWidget {
                             color: Color(0xFFF0F1F0),
                             child: Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      profile.name,
-                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 25),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  child: Row(
-                                    children: [
-                                      Text(profile.email),
-                                      // Text(' | '),
-                                      // Text(profile.user_id),
-                                    ],
-                                  ),
+                                FutureBuilder<String?>(
+                                  future: _getUserName(),  // username 가져오기
+                                  builder: (context, usernameSnapshot) {
+                                    if (usernameSnapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    } else if (usernameSnapshot.hasError) {
+                                      return Text('Error: ${usernameSnapshot.error}');
+                                    } else if (!usernameSnapshot.hasData || usernameSnapshot.data == null) {
+                                      return Text('No username found');
+                                    } else {
+                                      return Row(
+                                        children: [
+                                          Text(
+                                            usernameSnapshot.data!,
+                                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 25),
+                                          ),
+                                          Text(
+                                            ' 님 환영합니다!',
+                                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 25),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  },
                                 ),
                               ],
                             ),
@@ -104,6 +134,33 @@ class MyPage extends StatelessWidget {
                             children: [
                               ContentIconRow(icon: Icon(Icons.account_circle), text: profile.name),
                               ContentIconRow(icon: Icon(Icons.cake_outlined), text: profile.birth),
+                              ContentIconRow(icon: Icon(Icons.email_outlined), text: profile.email),
+                              FutureBuilder<String?>(
+                                future: _getUserPNum(), // 전화번호 가져오기
+                                builder: (context, phoneNumberSnapshot) {
+                                  if (phoneNumberSnapshot.connectionState == ConnectionState.waiting) {
+                                    return ContentIconRow(
+                                      icon: Icon(Icons.phone),
+                                      text: '전화번호 로딩 중...',
+                                    );
+                                  } else if (phoneNumberSnapshot.hasError) {
+                                    return ContentIconRow(
+                                      icon: Icon(Icons.phone),
+                                      text: '전화번호 로드 오류',
+                                    );
+                                  } else if (!phoneNumberSnapshot.hasData || phoneNumberSnapshot.data == null) {
+                                    return ContentIconRow(
+                                      icon: Icon(Icons.phone),
+                                      text: '전화번호 없음',
+                                    );
+                                  } else {
+                                    return ContentIconRow(
+                                      icon: Icon(Icons.phone),
+                                      text: phoneNumberSnapshot.data!,
+                                    );
+                                  }
+                                },
+                              ),
                             ],
                           ),
                           ContentBox(
@@ -111,17 +168,20 @@ class MyPage extends StatelessWidget {
                               ContentIconRow(
                                 icon: Icon(Icons.edit_note),
                                 text: "프로필 정보 수정",
-                                onTap: () {
-                                  Navigator.push(
+                                onTap: () async {
+                                  bool? shouldUpdate = await Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => MyProfile(userId: profile.user_id)),
                                   );
+                                  if (shouldUpdate == true) {
+                                    _updateProfileFuture(); // 프로필 데이터 업데이트
+                                  }
                                 },
                               ),
                               ContentIconRow(
                                 icon: Icon(Icons.textsms_outlined),
                                 text: "개발자 연락처",
-                                onTap: (){
+                                onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => ContactUsPage()),
@@ -133,7 +193,7 @@ class MyPage extends StatelessWidget {
                           ContentBox(
                             children: [
                               ContentIconRow(
-                                icon: Icon(Icons.logout_outlined, color: Colors.red,),
+                                icon: Icon(Icons.logout_outlined, color: Colors.red),
                                 text: "로그 아웃",
                                 onTap: () async {
                                   await _userService.logoutUser();
@@ -153,6 +213,11 @@ class MyPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<String?> _getUserName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('username');
   }
 }
 

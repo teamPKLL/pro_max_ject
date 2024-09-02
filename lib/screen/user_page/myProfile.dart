@@ -42,7 +42,9 @@ class _MyProfileState extends State<MyProfile> {
         birth: _birthController.text,
       );
       await _profileService.updateProfile(profile);
-      Navigator.pop(context);
+
+      // 데이터 업데이트 후 MyPage로 돌아가기
+      Navigator.pop(context, true);
     } catch (e) {
       print('Error saving profile: $e');
     }
