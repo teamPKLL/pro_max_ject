@@ -44,7 +44,7 @@ class _MainState extends State<Main> {
   Set<Marker> markers = {};
   late KakaoMapController mapController;
   final NoticeService _noticeService = NoticeService();
-  List<String> noticeTitles = [];
+  List<String> noticeTitles = ["공지사항 없음"];
 
   @override
   void initState() {
@@ -127,8 +127,9 @@ class _MainState extends State<Main> {
             SizedBox(height: height * 0.02),
             NoticeDisplayWidget(
                 strings: noticeTitles,
+              //strings: ['1111','2222','3333','4444'],
                 // TODO : 리스트는 공지사항 DB에서 title 몇개만 가져오는걸로..?
-                displayDuration: const Duration(seconds: 4),
+                displayDuration: const Duration(milliseconds: 1500),
                 context: context,
                 width: width,
                 height: height
