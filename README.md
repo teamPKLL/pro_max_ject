@@ -11,11 +11,12 @@
 
 ## 👩‍💻 참여인원
 ### **개발**
-|이현준|김나희|
-|:-:|:-:|
-|<a href="https://github.com/hjgel"><img src="https://github.com/user-attachments/assets/e21e2a05-1eb2-4d2f-9ddb-b1e01e6debe1" width=120></a>|<a href="https://github.com/minje98"><img src="https://github.com/user-attachments/assets/fa4bfa67-c810-4f32-9e99-d603fa593276" width=120></a>|
-|Leader, Backend|FrontEnd|
-|[@NARUBROWN](https://github.com/NARUBROWN)|[@Martinelli-3535](https://github.com/Martinelli-3535)|
+|이현준|박민제|김나희|이정준|
+|:-:|:-:|:-:|:-:|
+|<a href="https://github.com/hjgel"><img src="https://github.com/user-attachments/assets/e21e2a05-1eb2-4d2f-9ddb-b1e01e6debe1" width=120></a>|<a href="https://github.com/minje98"><img src="https://github.com/user-attachments/assets/fa4bfa67-c810-4f32-9e99-d603fa593276" width=120></a>|<a href="https://github.com/seraphicalness"><img src="https://github.com/user-attachments/assets/ca454d6f-eb5b-4911-9944-3c2dd7fab549" width=120></a>|<a href="https://github.com/june276"><img src="https://github.com/user-attachments/assets/6f47d02e-0f4f-446e-81ef-04610c46d029" width=120></a>|
+|Leader, Backend|Backend|Frontend|FrontEnd|
+|[@lee_h.j_gel](https://github.com/hjgel)|[@minje98](https://github.com/minje98)|[@moon_ie_](https://github.com/seraphicalness)|[@l_jnngjnne](https://github.com/june276)|
+
 
 <hr>
 
