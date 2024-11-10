@@ -39,9 +39,14 @@
 ### 기능 소개 
 
 <div class="image-gallery">
-  <div><img width="1359" alt="스크린샷 2024-11-10 오후 12 45 44" src="https://github.com/user-attachments/assets/ed265661-8bef-4fd0-981e-4da6a8d91d3f"></div>
-  <div><img width="1383" alt="스크린샷 2024-11-10 오후 12 46 26" src="https://github.com/user-attachments/assets/bcccb598-09b6-4860-b44b-55144ed7eff8"></div>
+  <div><img width="1359" alt="스크린샷 2024-11-10 오후 12 45 44" src="https://github.com/user-attachments/assets/ed265661-8bef-4fd0-981e-4da6a8d91d3f"><img width="1383" alt="스크린샷 2024-11-10 오후 12 46 26" src="https://github.com/user-attachments/assets/bcccb598-09b6-4860-b44b-55144ed7eff8"></div>
+  <div><img width="487" alt="스크린샷 2024-11-10 오후 12 40 03" src="https://github.com/user-attachments/assets/256a0177-07cf-4558-bd3b-e55e7dfbd878"><img width="1387" alt="스크린샷 2024-11-10 오후 12 50 29" src="https://github.com/user-attachments/assets/17656c4f-372b-4321-8a64-5ce773501d03"></div>
   <div><img src="image3.jpg" alt="Image 3"></div>
  
+
+
+
+
 </div>
+
 
