@@ -25,7 +25,9 @@
 그래서 이 대비책을 제공하고, 구조까지 간편하게 할 수 있는 앱을 만드는 건 어떨까? 하는 생각으로 이 애플리케이션을 기획하게 되었다.
 
 <hr>
+
 ### 핵심 기능
+
 <img width="1300" alt="스크린샷 2024-11-10 오후 12 40 11" src="https://github.com/user-attachments/assets/e644d588-8f22-467d-a3c6-b42a62318841">
 
  1. 문자 필터 기능으로 원하는 정보만 쏙 빼기!
@@ -33,6 +35,13 @@
  3. 케이스별 대피 방안을 제시하여 혼선을 방지.
 
 <hr>
+
 ### 기능 소개 
 
+<div class="image-gallery">
+  <div><img width="1359" alt="스크린샷 2024-11-10 오후 12 45 44" src="https://github.com/user-attachments/assets/ed265661-8bef-4fd0-981e-4da6a8d91d3f"></div>
+  <div><img width="1383" alt="스크린샷 2024-11-10 오후 12 46 26" src="https://github.com/user-attachments/assets/bcccb598-09b6-4860-b44b-55144ed7eff8"></div>
+  <div><img src="image3.jpg" alt="Image 3"></div>
+ 
+</div>
 
