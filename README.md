@@ -9,5 +9,4 @@
 국민 재난 안전 대책 서비스
 
 ### 기획 의도 
-
-<img width="972" alt="image" src="https://github.com/user-attachments/assets/18c2554a-c626-4281-b015-9cf2448c5ac5">
+<img width="700" alt="스크린샷 2024-11-10 오후 12 34 48" src="https://github.com/user-attachments/assets/d5079057-df50-4278-926d-0a7d73e92a67">
