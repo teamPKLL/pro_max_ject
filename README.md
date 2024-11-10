@@ -13,7 +13,7 @@
 ### **개발**
 |이현준|김나희|
 |:-:|:-:|
-|<a href="https://github.com/hjgel"><img src="https://github.com/user-attachments/assets/e21e2a05-1eb2-4d2f-9ddb-b1e01e6debe1" width=120></a>|<a href="https://github.com/minje98"><img src="[https://avatars.githubusercontent.com/u/79641160?v=4](https://github.com/user-attachments/assets/fa4bfa67-c810-4f32-9e99-d603fa593276)" width=120></a>|
+|<a href="https://github.com/hjgel"><img src="https://github.com/user-attachments/assets/e21e2a05-1eb2-4d2f-9ddb-b1e01e6debe1" width=120></a>|<a href="https://github.com/minje98"><img src="https://github.com/user-attachments/assets/fa4bfa67-c810-4f32-9e99-d603fa593276" width=120></a>|
 |Leader, Backend|FrontEnd|
 |[@NARUBROWN](https://github.com/NARUBROWN)|[@Martinelli-3535](https://github.com/Martinelli-3535)|
 
