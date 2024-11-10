@@ -29,6 +29,8 @@
 
 또 요즘 재난문자를 보면 이런 생각도 한다. 
 <br>
+<br>
+<br>
 
 <img width="700" alt="스크린샷 2024-11-10 오후 12 38 09" src="https://github.com/user-attachments/assets/c89192dc-7424-42d7-863b-503dc48030fd">
 
