@@ -11,9 +11,9 @@
 
 ## 👩‍💻 참여인원
 ### **개발**
-|김원정|홍정우|
+|이현준|김나희|
 |:-:|:-:|
-|<a href="https://github.com/NARUBROWN"><img src="https://avatars.githubusercontent.com/u/38902021?v=4" width=120></a>|<a href="https://github.com/Martinelli-3535"><img src="https://avatars.githubusercontent.com/u/79641160?v=4" width=120></a>|
+|<a href="https://github.com/hjgel"><img src="https://github.com/user-attachments/assets/e21e2a05-1eb2-4d2f-9ddb-b1e01e6debe1" width=120></a>|<a href="https://github.com/minje98"><img src="[https://avatars.githubusercontent.com/u/79641160?v=4](https://github.com/user-attachments/assets/fa4bfa67-c810-4f32-9e99-d603fa593276)" width=120></a>|
 |Leader, Backend|FrontEnd|
 |[@NARUBROWN](https://github.com/NARUBROWN)|[@Martinelli-3535](https://github.com/Martinelli-3535)|
 
@@ -54,6 +54,10 @@
 <br>
 https://flax-heron-d42.notion.site/team-PKLL-13a32ec3b69f80929dd8c8e999a783f0?pvs=4
 
+<hr>
+
+### 개발환경
+<img width="454" alt="스크린샷 2024-11-10 오후 1 01 17" src="https://github.com/user-attachments/assets/8ca85a17-a20a-4832-aa92-5203fb819631">
 
 
 
