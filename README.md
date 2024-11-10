@@ -39,7 +39,9 @@
 ### 기능 소개 
 <img width="1391" alt="스크린샷 2024-11-10 오후 12 53 02" src="https://github.com/user-attachments/assets/c54cc611-9e8a-4598-95a1-dc47ab9726af">
 
+<br>
 <ppt 링크>
+<br>
 https://flax-heron-d42.notion.site/team-PKLL-13a32ec3b69f80929dd8c8e999a783f0?pvs=4
 
 
