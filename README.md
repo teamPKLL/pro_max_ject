@@ -37,38 +37,11 @@
 <hr>
 
 ### 기능 소개 
+<img width="1391" alt="스크린샷 2024-11-10 오후 12 53 02" src="https://github.com/user-attachments/assets/c54cc611-9e8a-4598-95a1-dc47ab9726af">
 
-<div class="image-gallery">
-  <div class="image-row">
-    <img width="1359" alt="스크린샷 1" src="https://github.com/user-attachments/assets/ed265661-8bef-4fd0-981e-4da6a8d91d3f">
-    <img width="1383" alt="스크린샷 2" src="https://github.com/user-attachments/assets/bcccb598-09b6-4860-b44b-55144ed7eff8">
-  </div>
-  <div class="image-row">
-    <img width="487" alt="스크린샷 3" src="https://github.com/user-attachments/assets/256a0177-07cf-4558-bd3b-e55e7dfbd878">
-    <img width="1387" alt="스크린샷 4" src="https://github.com/user-attachments/assets/17656c4f-372b-4321-8a64-5ce773501d03">
-  </div>
-  <div class="image-row">
-    <img src="image3.jpg" alt="Image 3">
-  </div>
-</div>
+<ppt 링크>
+https://flax-heron-d42.notion.site/team-PKLL-13a32ec3b69f80929dd8c8e999a783f0?pvs=4
 
-<style>
-  .image-gallery {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* 행 간격 */
-  }
-  
-  .image-row {
-    display: flex; /* 행 내에서 이미지를 가로로 배치 */
-    gap: 10px; /* 이미지 간격 */
-  }
 
-  .image-row img {
-    width: 100%; /* 필요 시 이미지 크기 조정 */
-    max-width: 100%; /* 각 이미지가 행 안에 맞춰 조정 */
-    height: auto;
-  }
-</style>
 
 
