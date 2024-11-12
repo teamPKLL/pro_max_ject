@@ -57,7 +57,7 @@
 <br>
 <ppt 링크>
 <br>
-https://flax-heron-d42.notion.site/team-PKLL-13a32ec3b69f80929dd8c8e999a783f0?pvs=4
+<a href="https://flax-heron-d42.notion.site/team-PKLL-13a32ec3b69f80929dd8c8e999a783f0?pvs=4">설명 PPT</a>
 
 <br>
 <hr>
